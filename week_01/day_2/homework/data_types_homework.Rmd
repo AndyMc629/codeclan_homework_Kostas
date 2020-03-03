@@ -1,0 +1,80 @@
+Data Types Homework
+
+Part 1
+
+Question_1
+```{r}
+stock_prices <- c(23, 27, 23, 21, 34, 24, 25, 30, 37, 30)
+day_of_week <- c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday")
+class(day_of_week)
+```
+
+Question 2.
+```{r}
+day_of_week_factor <- as.factor(day_of_week)
+class(day_of_week_factor)
+```
+
+```{r}
+named_stock_prices <- names(day_of_week)
+named_stock_prices
+stock_prices
+```
+
+Question 3.
+```{r}
+stock_data <- data.frame(stock_prices,day_of_week)
+View(stock_data)
+```
+
+
+```{r}
+stock_list <- list(stock_prices = stock_prices,
+                   day_of_week = day_of_week,
+                   stock_data = stock_data )
+
+stock_list
+```
+
+
+Part 2
+
+Question 1
+```{r}
+stock_prices <- c(23, 27, 23, 21, 34, 24, 25, 30, 37, 30)
+day_of_week <- c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday")
+stock_data <- data.frame(stock_prices,day_of_week)
+
+stock_prices[4:6]
+stock_prices[stock_prices>30]
+
+
+```
+
+Question 2
+```{r}
+a <- stock_data[, 'day_of_week']
+a
+
+b <- subset(stock_data, stock_prices < 25)
+b
+
+c <- stock_data[, 1]
+c
+
+d <- stock_data[3, ]
+d
+
+e <- stock_data[1,3]
+e
+```
+
+Question 4
+```{r}
+stock_list <- list(stock_prices = stock_prices,
+                   day_of_week = day_of_week,
+                   stock_data = stock_data )
+
+stock_list$stock_data
+
+```

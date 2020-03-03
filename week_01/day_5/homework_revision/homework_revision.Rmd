@@ -1,0 +1,65 @@
+Homework Revision 
+
+
+```{r}
+is_bird <- function(x){
+  if (x %in% c("goose", "pigeon", "duck"))
+    return("bird")
+  else
+    return("not bird")
+}
+is_bird("goose")
+```
+
+2.3 ifelse(), recode(), case_when()
+
+```{r}
+# Get the packcage 
+library(dplyr)
+```
+
+```{r}
+sizes <- c(13, 15, 10, 8, 22)
+ans_1 <- function(x){
+  ifelse(x > 10, "Big", "Small")
+}
+ans_1(size)
+ans_1b <- ifelse(size, "Big", "Small")
+
+ans_2 <- recode(sizes, '10' = "Small", '8' = "Small", .default = "Big")
+
+ans_3 <- case_when(
+  sizes>10 ~ "Big",
+  TRUE ~ "Small"
+)
+```
+
+
+```{r}
+wife_age <- c(29L, 30L, 36L, 31L, 22L)
+husband_age <- c(28L, 35L, 32L, 31L, 29L)
+
+ans_4 <- when_case(
+  wife_age - husband_age > 0 ~ "wife older",
+  wife_age - husband_age == 0 ~ "same age",
+  wife_age - husband_age < 0 ~ "husband older"
+)
+```
+
+
+```{r}
+a <- c("a", "b")
+b <- c("c", "d")
+ans1 <- paste(a, b)
+ans1
+ans2 <- paste0(a, b)
+ans2
+
+
+ans3 <- paste(a, collapse = "")
+ans3
+
+ans4 <- paste(a, collapse = " ")
+ans4
+```
+

@@ -1,0 +1,113 @@
+Reading in data homework
+
+-------------------------------------------------
+Part 1: MVP
+-------------------------------------------------
+
+```{r}
+library(readr)
+```
+
+
+Question 1_1:Read in the state_income_data.csv file using the appropriate function.
+
+```{r}
+state_income_data <- read_csv("data/state_income_data.csv")
+state_income_data
+```
+
+
+Question 1_2: How do you specify your own column names when using read_csv()?
+
+```{r}
+# We re-create the "sate_income_data vector" but this time we re-name the colum names. We store the new data into a vector, called "sate_income_data vector2". We only rename 3 columns
+
+state_income_data2 <- read_csv("data/state_income_data.csv", 
+                               col_names = c("Col1",
+                                             "Col2",
+                                             "Col3")
+                               )
+state_income_data2
+```
+
+
+Question 1_3: Read in the cars.csv file and use the col_types() function to ensure you load in:
+```{r}
+cars <- read_csv("data/cars.csv")
+cars
+
+# We now want to classify the variable (column) "vs as logical. We storage the results into an object called cars2
+cars2 <- read_csv("data/cars.csv", col_types = cols(vs = col_logical()))
+cars2
+```
+
+Question 1_4: Read in the scotland.txt file using the appropriate function.
+
+```{r}
+# The data file separates each variable with semi-colons. Therefore, we use the "read_delim" functions. It doesn't look like it works
+scotland <- read_delim("data/scotland.txt", delim = ";")
+scotland
+
+scotland2 <- read_table("data/scotland.txt")
+scotland2
+
+scotland3 <- read_tsv("data/scotland.txt")
+scotland3
+```
+
+Question 1_5: How do you read text into a one element character vector?
+
+```{r}
+char_vector <- read_lines("data/")
+```
+
+Question 1_6: Read in the steam-200k-sample.csv file. Fix any problems you may encounter.
+
+```{r}
+steam_sample <- read_csv("data/steam-200k-sample.csv", skip = 5, 
+                         col_names = c("customer_id",
+                                       "game_name",
+                                       "what",
+                                       "value",
+                                       "bought_online"), col_types = cols(bought_online = col_logical())
+                         )
+steam_sample
+```
+
+Question 1_7: Read in the historic_eu_payments.tsv file.
+
+```{r}
+historic_payments <- read_tsv("data/historic_eu_payments.tsv")
+historic_payments
+
+```
+
+Question 1_8: How do you read lines of text into a multi-element text vector?
+```{r}
+
+```
+
+
+Question 1_9:
+```{r}
+
+```
+
+Question 1_10:
+```{r}
+
+```
+
+
+-------------------------------------------------
+Part 2: Extension work
+-------------------------------------------------
+
+```{r}
+sp
+
+
+```
+
+
+
