@@ -1,0 +1,81 @@
+#########################################################################################
+
+##                                  HOMEWORK (Week_02_day_5)
+
+#########################################################################################
+
+## Load the necessary libraries
+```{r}
+library(keyring)
+library(RPostgreSQL)
+```
+
+
+## Connecting R to local database
+```{r}
+keyring_unlock("local")
+username <- key_get("postgresql_username", keyring = "local") 
+password <- key_get("postgresql_password", keyring = "local")
+keyring_lock("local")
+db_connect <- dbConnect(drv = PostgreSQL(), user = username, password = password, dbname = "acme_employees", host = "localhost")
+rm(username, password)
+```
+
+We check which tables are included in the database. The dbListTables command help us to do so. We can use two different commands:
+## Approach 1
+```{r}
+dbListTables(conn = db_connect)
+```
+
+```{r}
+employees_vect <- dbGetQuery(db_connect, 
+           "SELECT *
+           FROM employees") 
+teams_vect <- dbGetQuery(db_connect, 
+           "SELECT *
+           FROM teams") 
+feedbacks_vect <- dbGetQuery(db_connect, 
+           "SELECT *
+           FROM feedbacks") 
+```
+
+Question 1_1:Create a new data.frame containing the details of all employees held in the database
+```{r}
+employees_vect <- dbGetQuery(db_connect, 
+           "SELECT * 
+           FROM employees 
+           ") 
+```
+
+
+Question 1_2:Retrieve the records for all employees again, but this time add a field full_name containing the first_name and last_name of each employee separated by a space.
+# Approach 1
+```{r}
+employees_vect <- dbGetQuery(db_connect, 
+           "SELECT *, CONCAT(first_name, ' ',last_name) AS full_name 
+           FROM employees 
+           ") 
+```
+
+Question 1_3: Retrieve the details of all employees again, but this time listing their team name (as team_name), rather than their team_id.
+# Approach 1
+```{r}
+dbGetQuery(db_connect,
+           "SELECT e.first_name, e.last_name, e.email, t.name AS team_name
+           FROM employees AS e LEFT JOIN teams AS t
+           ON e.team_id = t.id")
+```
+
+# Approach 1
+```{r}
+dbGetQuery(db_connect,
+           "SELECT employees.first_name, employees.last_name, employees.email, teams.name             AS team_name
+           FROM employees AS e LEFT JOIN teams AS t
+           ON employees.team_id = teams.id")
+```
+
+
+
+
+
+

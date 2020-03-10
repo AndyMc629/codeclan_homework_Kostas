@@ -1,0 +1,242 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+###################################################################################
+##                          HOMEWORK
+###################################################################################
+
+
+```{r}
+library(tidyverse)
+library(CodeClanData)
+library(dplyr)
+```
+
+
+
+--------------------------------------------------------------------------------------
+# Question 1
+--------------------------------------------------------------------------------------
+Load in the dataset and call it drinks_content, eyeball it by printing it out (first 5 rows, last 5 rows, and then all of the data) and find out the dimensions (number of rows/columns) and variable names. 
+
+
+# Read the data 
+```{r}
+drinks_content <- read_csv("data/starbucks_drinkMenu_expanded.csv")
+```
+
+
+# First 5 rows from the data
+```{r}
+head(drinks_content,5) 
+```
+
+# Last 5 rows from the data
+```{r}
+tail(drinks_content, 5) 
+```
+
+# Dimensions  and variable names. 
+```{r}
+nrow(drinks_content)
+ncol(drinks_content)
+dim(drinks_content)
+names(drinks_content)
+```
+
+
+--------------------------------------------------------------------------------------
+# Question 2
+--------------------------------------------------------------------------------------
+Calculate some quick summary statistics to check the mean, the variance, and the normality of the Calories variable. Write a quick summary of your initial impressions of the data. 
+
+```{r}
+starbucks_stats <- summarise(drinks_content, mean(Calories), var(Calories), sd(Calories), 
+                             median(Calories),max(drinks_content$Calories),
+                             min(drinks_content$Calories))  
+```
+
+--------------------------------------------------------------------------------------
+# Question3
+--------------------------------------------------------------------------------------
+
+
+# Plot a boxplot for the variable "Calories"
+# Now we have a look at height column of the mtcars dataset with boxplot
+```{r}
+boxplot(drinks_content$Calories)
+```
+
+
+# Find the value of the outlier and the details of this observation
+```{r}
+outliers <- boxplot(drinks_content$Calories, plot=FALSE)$out
+print(outliers)
+```
+
+# Get the details of the outlier
+```{r}
+drinks_content[which(drinks_content$Calories %in% outliers), ]
+```
+
+
+```{r}
+summary(drinks_content$Calories)
+```
+
+As can be seen from the boxplot and the statistical analysis using the function "summary" , most of the beverages provided by starbucks contain between 100 to 200 calories (cal), with a median value of 185 cal. White Chocolate Mocha, which belongs to the "Signature Espresso" beverage category contains the maximum amount of calories, 510 cal per drink.     
+
+Since the difference between the value of the "Signature Espresso" and the mean ius bigger than the standard deviation, which is 103, it is sensible to remove this outlier from the data because it affects its mean.
+
+# Remove the outlier from the data
+```{r}
+# Now you can remove the rows containing the outliers, one possible option is:
+drinks_content_nooutlier <- drinks_content[-which(drinks_content$Calories %in% outliers),]
+
+# If you check now with boxplot, you will notice that those pesky outliers are gone!
+boxplot(drinks_content_nooutlier$Calories)
+```
+
+
+
+
+--------------------------------------------------------------------------------------
+# Question 4
+--------------------------------------------------------------------------------------
+
+
+# Select the variables beverage_category, beverage, beverage prep and calories from your data.
+```{r}
+select(drinks_content_nooutlier, Beverage_category:Calories)
+```
+
+
+# Drop the NA from the data
+```{r}
+drinks_content_no_na <- drop_na(drinks_content_nooutlier) 
+drinks_content_no_na
+```
+
+--------------------------------------------------------------------------------------
+# Question 5
+--------------------------------------------------------------------------------------
+
+# We manipulate the data so that we only take “classic espresso drinks”. 
+```{r}
+filter(drinks_content_no_na, Beverage_category == "Classic Espresso Drinks")
+```
+
+
+
+
+--------------------------------------------------------------------------------------
+# Question 6
+--------------------------------------------------------------------------------------
+
+# We create a new column, called calorie_diff, which shows which beverage contains teh number of sugar cubes.
+```{r}
+drink_table <- mutate(drinks_content_no_na, calorie_diff = (135 - Calories)/10)
+drink_table
+```
+
+--------------------------------------------------------------------------------------
+# Question 7
+--------------------------------------------------------------------------------------
+
+```{r}
+drinks_content_no_na
+```
+
+
+Create a new tibble called drinks_grouped where you group your data by the type of beverage prep. Then summarise the mean calories in each drink (by group) in a variable called mean_cal, and save it to drinks_summary. Finally arrange this summary data in descending order of mean calories. 
+
+
+
+
+
+```{r}
+
+drinks_grouped <- group_by(drinks_content_no_na, Beverage_prep)
+# we now get the "Calories" mean for each group 
+grouped_mean <- summarise(drinks_grouped, mean_cal = mean(Calories))
+arrange(grouped_mean,desc(mean_cal))
+```
+
+The results clearly show that beverages made with "Whole Milk" contain the most calories whereas beverages with solo shots contain the least calories.
+
+```{r}
+drinks_summary <- summarise(drinks_content_no_na, mean(Calories))
+a
+#summarise(Beverage_prep_count = n()) 
+```
+
+
+--------------------------------------------------------------------------------------
+# Question 9
+--------------------------------------------------------------------------------------
+
+
+Use the drink_calories data to find the two drinks (Beverage) with least and most Calories.
+
+# The drink(Beverage with the most Calories)  
+```{r}
+i_max <- which.max(drinks_content_no_na$Calories)
+i_max
+drinks_content_no_na$Calories[i_max]
+```
+
+The element "i_max=85" corresponds to the "White Chocolate Mocha (Without Whipped Cream)"  beverageand contains 460 calories. 
+
+# The drink(Beverage with the least Calories)  
+```{r}
+i_min <- which.min(drinks_content_no_na$Calories)
+i_min
+drinks_content_no_na$Calories[i_min]
+```
+
+
+The element "i_max=102" corresponds to the "Tazo® Tea" beverage and contains 0 calories. 
+
+
+--------------------------------------------------------------------------------------
+# Question 10 (in progress)
+--------------------------------------------------------------------------------------
+
+For each drink in the drinks_grouped data, find all drinks which more calories than the average drink. Save this in a new tibble called above_average_calories. 
+
+```{r}
+drinks_grouped_data <- group_by(drinks_content_no_na, Calories)
+drinks_grouped_data
+
+#which(drinks_content_no_na$Calories > mean(drinks_content_no_na$Calories))
+#drinks_grouped_data <- mutate(above_average_calories = Calories > avg(drinks_content_no_na$Calories))drinks_grouped_data
+
+```
+
+--------------------------------------------------------------------------------------
+# Question 11 (a cumulative distribution function) (in progress)
+--------------------------------------------------------------------------------------
+
+Using the drinks_grouped data, apply the cume_dist function to get the top 25% of Calorie drinks within each group. Save this in a new tibble called drinks_distribution. 
+
+```{r}
+drinks_distribution <- drinks_grouped %>%
+  arrange(desc(Calories))
+
+
+  
+cume_dist(drinks_grouped_data$Calories < 0.25)   
+drinks_distribution 
+
+filter(cume_dist(drinks_grouped_data$Calories > 25)   
+drinks_distribution 
+
+
+#drinks_grouped_data_new <- mutate(drinks_grouped_data, drinks_distribution)
+#drinks_grouped_data_new
+```
+
+
+
