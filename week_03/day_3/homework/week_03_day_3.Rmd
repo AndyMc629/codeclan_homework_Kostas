@@ -1,0 +1,156 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+##########################################################################################################
+#                                         Homework: week_03_day3
+##########################################################################################################
+
+# Purpose
+In this work, we analyse data and investigate the overall tweet metrics (likes and retweets) from the CodeClan Twitter page. 
+
+# We first load the require libraries
+```{r}
+library(CodeClanData)
+library(tidyverse)
+```
+
+----------------------------------------------------------------------------------------------------------------------
+# Question 1_1: Load the code_clan_tweets.csv data. Find the number of rows, columns, and list all the variable names.
+----------------------------------------------------------------------------------------------------------------------
+```{r}
+tweets <- read_csv("data/code_clan_tweets.csv")
+```
+
+# We first analyse the "code_clan_tweets" data
+```{r}
+nrow(tweets)
+ncol(tweets)
+dim(tweets)
+list(tweets)
+```
+
+We get a 234 (rows) x 27 (columns) tibble. 
+
+# We also want to get the names of each variable in our "code_clan_tweets" data
+```{r}
+names(tweets)
+```
+
+
+----------------------------------------------------------------------------------------------------------------------
+# Question 1_2: First, we’re going to summarise the number of likes (favorite_count) CodeClan tweets have. Create a boxplot to check for outliers.
+----------------------------------------------------------------------------------------------------------------------
+
+
+# Now we have a look at height column of the mtcars dataset with boxplot
+```{r}
+boxplot(tweets$favorite_count)
+```
+
+# We also get the values of the outliers shown in the boxplot. The command below shows that values above number 5 are considered as outliers. There are 26 outliers.
+```{r}
+outliers <- boxplot(tweets$favorite_count, plot=FALSE)$out
+```
+
+
+```{r}
+print(outliers)
+```
+
+# We now can get all the details from the outliers. We use the command:
+# We can also find all the details of the outlier. 
+```{r}
+which(tweets$favorite_count %in% outliers)
+tweets[which(tweets$favorite_count %in% outliers), ]
+```
+
+----------------------------------------------------------------------------------------------------------------------
+# Question 1_3: Find the total number of favourited tweets (stored in favorite_count) that CodeClan tweets have got. Don’t add a tweet’s favorite_count to the total when the tweet was quoted (see the is_quote variable).
+----------------------------------------------------------------------------------------------------------------------
+
+
+```{r}
+tweets %>% 
+  filter(is_quote == FALSE)
+summarise(total = n(is_quote))
+```
+
+
+
+----------------------------------------------------------------------------------------------------------------------
+# Question 1_4: Summarise the mean number of retweets (retweet_count), split by the type of platform that was used to tweet (source). Again, omit quoted tweets from the mean.
+----------------------------------------------------------------------------------------------------------------------
+
+We first grouoped thh sources (or plattforms) that was used to retweet. We use the "group_by" function. Then we use the "mean" function to get the mean number of retweet accoumnts.
+# Approach 1
+```{r}
+tweets_grouped <- group_by(tweets, source)
+summarise(tweets_grouped, mean(retweet_count))
+```
+
+# Approach 2 (using pipes) 
+```{r}
+tweets %>% 
+  group_by(source) %>% 
+  summarise(mean_tweets = mean(retweet_count))
+```
+
+
+----------------------------------------------------------------------------------------------------------------------
+# Question 1_5: Count the total number of likes (i.e. total of favorite_count), split by media type, and arrange them from most likes to least. Assume that any tweets without a listed media type are of type “text”.
+----------------------------------------------------------------------------------------------------------------------
+
+
+
+```{r}
+tweets %>% 
+  select(favorite_count, media_type)  %>% 
+  group_by(media_type) %>% 
+  summarise(number_likes = n())
+```
+
+
+
+----------------------------------------------------------------------------------------------------------------------
+# Question 1_6: Find the mean number of characters that a CodeClan tweet contains.
+----------------------------------------------------------------------------------------------------------------------
+
+```{r}
+tweets
+```
+
+```{r}
+tweets %>% 
+  group_by(text) %>%
+  summarise(character_count = mean())
+```
+
+----------------------------------------------------------------------------------------------------------------------
+# Question 1_7: The code_clan_info.csv data file contains status_url along with other info. Load this in, and join it to the code_clan_tweets tibble, so that you have a status_url for each tweet. Decide which variable to join the tibbles on.
+----------------------------------------------------------------------------------------------------------------------
+
+
+```{r}
+tweets_info <- read_csv("data/code_clan_info.csv")
+```
+
+```{r}
+status_url <- tweets_info$url
+```
+
+```{r}
+new_joined_data <- tweets %>% 
+  mutate(status_url)
+```
+
+
+----------------------------------------------------------------------------------------------------------------------
+# Question 1_8: From your new joined data, create a new tibble codeclan_hashtags containing only the tweet_id and hashtags in lowercase for analysis. Keep only those tweets with hashtags.
+----------------------------------------------------------------------------------------------------------------------
+
+```{r}
+codeclan_hashtags <- select(new_joined_data, tweet_id, hashtags)
+```
+
