@@ -1,0 +1,13 @@
+---
+title: "Report"
+author: "Kostas Christodoulou"
+date: "19/03/2020"
+output: html_document
+---
+
+
+## **Cake ingredients - Overview**
+
+
+#### This report focuses on quantity and combinations of ingredients that are used to prepare different cake styles. It carries out some analysis from given manipulated data and it answers. In particular, it considers 33 different ingredients and their quantity in order to prepare 19 cakes.
+

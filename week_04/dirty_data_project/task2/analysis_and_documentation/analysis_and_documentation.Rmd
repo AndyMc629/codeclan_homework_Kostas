@@ -1,0 +1,111 @@
+---
+--title: "Report"
+author: "Kostas Christodoulou"
+date: "19/03/2020"
+output: html_notebook
+---
+
+# **Cake ingredients**
+### **Overview**
+
+This report focuses on quantity and combinations of ingredients that are used to prepare different cake styles. It carries out statistical analysis from a given manipulated dataset and it answers some specific questions. In particular, the report considers 33 different ingredients and their quantity measurements in order to prepare 19 cakes. 
+
+### **Introduction **
+
+
+The following libraries are required for the analysis. The command library( ) is used to load each library:
+```{r}
+library(readr)
+library(here)
+library(tidyverse)
+library(janitor)
+library(stringr)
+```
+
+The *readr* library has the 'read_csv' function which is used in the study to read the considered dataset in R. The command below storages the 'cake_ingredients_tidy_data' file into an object, called "cake_ingredients_data"
+```{r}
+cake_ingredients_data <- read_csv("clean_data/cake_ingredients_tidy_data.csv")
+```
+
+Moreover, the next two commands provide us with a brief summary of the dataset. It shows all the cakes that are listed in the data:
+```{r}
+unique(cake_ingredients_data$cake)
+```
+
+and the ingredients that are needed for the cake preparation:
+```{r}
+unique(cake_ingredients_data$ingredient)
+```
+
+
+### **Data analysis**
+
+
+
+##### *Question 1. Which cake has the most cocoa in it?*
+```{r}
+cake_ingredients_data_Q1 <- cake_ingredients_data %>% 
+      filter(ingredient == "cocoa") 
+
+cake_ingredients_data_Q1[index <-which.max(cake_ingredients_data_Q1$weight), ]
+```
+The *One Bowl Chocolate* has ten tablespoons of cocoa which makes it the cake with the most cocoa in the dataset.
+
+##### *Question 2. For sponge cake, how many cups of ingredients are used in total?*
+```{r}
+cake_ingredients_data_Q2 <- cake_ingredients_data %>% 
+      select(cake, measure, weight, ingredient) %>% 
+      filter(measure == "cup", cake == "Sponge") %>%
+      summarise(count = sum(weight))
+
+cake_ingredients_data_Q2
+```
+
+The *Sponge cake* requires 0.75 cups of siftet flour, 0.75 cups of granulated sugar and 2 cups of water. In overall, the *Sponge* cake requires in total 3.5 cups of ingredients.  
+
+##### *Question 3. How many ingredients are measured in teaspoons?*
+```{r}
+cake_ingredients_data_Q3 <- cake_ingredients_data %>% 
+      group_by(measure) %>% 
+      summarise(ways_of_measurment = n())
+
+cake_ingredients_data_Q3
+```
+The are 45 different ingredients that are measured in teaspoons. Those ingredients (45) that 
+are measured in teaspoons can be found by applying the *filter( )* function in the original dataset, such as,
+```{r}
+
+cake_ingredients_data_Q3b <- cake_ingredients_data %>%
+           filter(measure == "teaspoon")
+
+cake_ingredients_data_Q3b
+```
+
+
+##### *Question 4. Which cake has the most unique ingredients?*
+
+```{r}
+cake_ingredients_data_Q4 <- cake_ingredients_data %>% 
+      group_by(cake) %>% 
+      summarise(most_unique_ingredients = n()) %>% 
+      arrange(desc(most_unique_ingredients))
+
+cake_ingredients_data_Q4
+```
+There are two cakes with 11 unique (different) ingredients - these are the
+(a) *Babas au Rhum* and the 
+(b) *one Bowl Chocolate*.
+
+##### *Question 5.Which ingredients are used only once?*
+```{r}
+
+cake_ingredients_data_Q5 <- cake_ingredients_data %>% 
+      group_by(ingredient) %>% 
+      summarise(ingredient_appearances = n()) %>%
+      arrange(ingredient_appearances) %>% 
+      filter(ingredient_appearances == 1)
+
+cake_ingredients_data_Q5
+
+```
+The ingredients *bananas*, *cream of tartar*, *crushed ice*, *dried currants*, *egg white*, *nutmeg*, *nuts* and *zwiebach* are only used once in all the cakes.

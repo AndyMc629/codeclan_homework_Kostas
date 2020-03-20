@@ -1,0 +1,97 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+############################################################################
+# TASK 1: DECATHLON DATA
+############################################################################
+
+
+# We load the necessary packages for the analysis
+```{r}
+library(readr)
+library(here)
+library(tidyverse)
+library(janitor)
+library(stringr)
+```
+
+
+# Storage the decathlon.rds file into an object, called "decathlon_data"
+```{r}
+decathlon_data <- read_csv("clean_data/decathlon_tidy_data.csv")
+```
+
+
+
+
+------------------------------------------------------------------------------
+#                   Analysis questions
+------------------------------------------------------------------------------
+
+# Question 1. Who had the longest long jump seen in the data?
+```{r}
+decathlon_data_Q1 <- decathlon_data %>% 
+  select(name, sports, scores) %>% 
+  filter(sports == "long_jump") 
+
+# we use the 'which.max' function who is applied to the column "scores". 
+decathlon_data_Q1[which.max(decathlon_data_Q1$scores),]
+
+```
+
+# Question 2. What was the average 100m time in each competition?
+```{r}
+decathlon_data_Q2 <- decathlon_data %>% 
+  select(competition, sports, scores) %>% 
+  filter(sports == "100m") %>% 
+  group_by(competition) %>% 
+  summarise(mean(scores))
+
+```
+
+
+# Question 3. Who had the highest total points across both competitions?
+```{r}
+decathlon_data_Q3 <- decathlon_data %>% 
+  group_by(name) %>% 
+  summarise("total_points" = sum(points)) 
+
+decathlon_data_Q3[which.max(decathlon_data_Q3$total_points),]
+
+```
+
+
+
+
+
+#Question 4.What was the shot-put scores for the top three competitors in each competition?
+```{r}
+decathlon_data_Q4 <- decathlon_data %>% 
+    filter(sports == "shot_put") %>% 
+    arrange(rank) 
+
+# We get the first 6 observations (associated to the top three comptetitros)
+decathlon_data_Q4 <- decathlon_data_Q4[c(1:6),]
+           
+```
+
+
+# Question 5. What was the average points for competitors who ran the 400m in less than 50 seconds vs. those than ran 400m in more than 50 seconds?
+
+```{r}
+decathlon_data_Q5 <- decathlon_data %>% 
+    filter(sports == "400m")
+
+index1 <- which(decathlon_data_Q5$scores > 50)
+index2 <- which(decathlon_data_Q5$scores < 50)
+
+
+mean(decathlon_data_Q5$points[index1])
+mean(decathlon_data_Q5$points[index2])
+
+
+```      
+
+

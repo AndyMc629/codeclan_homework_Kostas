@@ -1,0 +1,83 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+#############################################################################
+#                           Data Cleaning Scripts
+#############################################################################
+
+# We load the necessary packages for the analysis
+```{r}
+library(readr)
+library(here)
+library(tidyverse)
+library(janitor)
+library(stringr)
+```
+
+
+# Storage the 'cake_ingredient_code.csv' file into an object, called "cake_ingredients_data"
+```{r}
+cake_ingredients_data <- read_csv("raw_data/cake-ingredients-1961.csv")
+cake_ingredients_data
+```
+
+
+# Storage the 'cake_ingredient_code.csv' file into an object, called "cake_ingredients_data_code"
+```{r}
+cake_ingredients_code <- read_csv("raw_data/cake_ingredient_code.csv")
+cake_ingredients_code
+```
+
+
+# We usew the 'pivot_longer' function to tidy up the given data. The new data is stored in an object called, "cake_ingredients_tidy_data".
+
+# We also remove all the NAs from the new table
+```{r}
+cake_ingredients_tidy_data <- cake_ingredients_data %>% 
+  pivot_longer(cols = c("AE":"ZH"), 
+             names_to = "code", 
+             values_to = "weight")
+
+cake_ingredients_tidy_data<- cake_ingredients_tidy_data %>% 
+  drop_na()
+```
+
+
+# We join the two tables together 
+```{r}
+# joining the two tables together, so the information is all in the same place. 
+cake_ingredients_tidy_data <- left_join(cake_ingredients_tidy_data, 
+                                     cake_ingredients_code, by = "code") 
+```
+
+# We remove the "code" column from the data
+```{r}
+cake_ingredients_tidy_data <- cake_ingredients_tidy_data %>% 
+                           select(-code)
+```
+
+
+# We rename the "Cake" column to "cake" column
+```{r}
+names(cake_ingredients_tidy_data) <- c("cake", "weight", "ingredient","measure") 
+names(cake_ingredients_tidy_data)
+```
+
+# We set strings to lowcasecase across the column "ingredient"
+# We keep the cake names as it is because the names look consistent 
+```{r}
+cake_ingredients_tidy_data <- cake_ingredients_tidy_data %>% 
+  mutate(ingredient = str_to_lower(ingredient))
+```
+
+
+# We now write the clean file and save it in the folder "clean_data" 
+```{r}
+write_csv(cake_ingredients_tidy_data, "clean_data/cake_ingredients_tidy_data.csv")
+```
+
+
+
+

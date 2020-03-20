@@ -1,0 +1,60 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+# We load the necessary packages for the analysis
+```{r}
+library(readr)
+library(here)
+library(tidyverse)
+library(janitor)
+library(stringr)
+```
+
+
+# Storage the decathlon.rds file into an object, called "decathlon_data"
+```{r}
+decathlon_data <- read_rds("raw_data/decathlon.rds")
+decathlon_data
+```
+
+
+# We assign a column name as "name" 
+```{r}
+decathlon_tidy_data <- decathlon_data %>% 
+                     rownames_to_column("name")  
+```  
+
+
+# We now change the names of each sport
+```{r}
+names(decathlon_tidy_data) <- c("name", "100m", "long_jump", "shot_put", "high_jump","400m","110m_hurdle", "discus","pole_vault","javeline","1500m","rank","points","competition") 
+names(decathlon_tidy_data)
+```
+
+
+# We usew the 'pivot_longer' function to tidy up the table 
+```{r}
+decathlon_tidy_data <- decathlon_tidy_data %>% 
+  pivot_longer(cols = c("100m", "long_jump", "shot_put",    "high_jump","400m","110m_hurdle","discus","pole_vault","javeline","1500m"), 
+             names_to = "sports", 
+             values_to = "scores")
+```
+
+# We set strings to lowcasecase across the column "name"
+```{r}
+decathlon_tidy_data <- decathlon_tidy_data %>% 
+  mutate(name = str_to_lower(name))
+```
+
+
+# We now write save the tidy file 
+```{r}
+write_csv(decathlon_tidy_data, "clean_data/decathlon_tidy_data.csv")
+```
+
+
+
+
+

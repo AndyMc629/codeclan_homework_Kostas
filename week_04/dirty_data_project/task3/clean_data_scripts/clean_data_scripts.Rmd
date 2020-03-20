@@ -1,0 +1,48 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+#############################################################################
+#                           Data Cleaning Scripts
+#############################################################################
+
+# We load the necessary packages for the analysis
+```{r}
+library(readxl)
+library(here)
+library(tidyverse)
+library(janitor)
+library(stringr)
+library(openxlsx)
+
+```
+
+
+# Storage the 'seabirds.xls' file into an object, called "seabirds_data"
+```{r}
+seabirds_data <- read_xls("raw_data/seabirds.xls")
+seabirds_data
+```
+
+
+
+# Storage the individual sheet 'Ship data by record ID' from the'seabirds.xls' file into an object, called "ship data"
+```{r}
+ship_data <- read_xls("raw_data/seabirds.xls", sheet = "Ship data by record ID")
+dim(ship_data)
+head(ship_data, 3)
+names(ship_data)
+```
+
+
+# Storage the individual sheet 'Bird data by record ID' from the'seabirds.xls' file into an object, called "bird data"
+```{r}
+bird_data <- read_xls("raw_data/seabirds.xls", sheet = "Bird data by record ID")
+dim(bird_data)
+head(bird_data, 3)
+names(bird_data)
+```
+
+
+
