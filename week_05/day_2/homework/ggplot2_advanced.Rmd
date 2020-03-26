@@ -1,0 +1,96 @@
+
+
+# Homework - ggplot2 advanced
+
+### Section 1: Learning Objectives
+
++ Practice making plots with ggplot2
++ Create your own theme and use it with plots
+
+### Section 2: Background
+QikBit is a start-up company producing low cost fitness trackers. Their flagship product, the KwikBit Unit1 (spot the mistake on the patent form) reproduces the functionality of the best in class commercial fitness trackers, but is cheap to make. They are currently preparing to pitch to a potential investor and require a selection of charts to include in their presentation and promotional materials.
+
+### Section 3: Data
+The data for this assignment is provided in the CodeClanData package.
+
++ qb_revenue_breakdown
++ qb_monthly_sales
++ qb_competitors
++ qb_device_data
+
+### Section 4: MVP
+
+Before we start our analysis, we need first to load the necessary libraries
+```{r}
+library(tidyverse)
+library(CodeClanData)
+library(ggplot2)
+```
+
+
+
+#### Part 1
+
+**Question 1. Take the data in the dataset qb_revenue_breakdown and make a stacked bar chart showing the sources of revenue across the two years in the dataset.**
+
+
+```{r}
+qb_revenue_breakdown
+```
+
+There are four sources of revenue each year for the QikBit start-up companye, which are: 
++ Accessories
++ Smart Watches
++ Subscription Services
++ Trackers
+```{r}
+qb_revenue_breakdown %>% 
+ggplot() + 
+  geom_bar(aes(x = Year, fill = Product))
+```
+
+**Question 2. Make a line chart showing monthly sales of the “flagship product” - the KwikBit Unit1 - over the last year. This data is inside qb_monthly_sales, but you will need to use subset.**
+
+We first use the filter function to select only the observations related to the KwikBit Unit1.
+```{r}
+qb_monthly_sales
+```
+
+We now plot the line plot for the montly sales of the “flagship product” - the KwikBit Unit1 with respect to time (over a year period).
+```{r}
+flagship_product <-filter(qb_monthly_sales, Cashflow == "Kwikbit Unit 1 Sales") 
+flagship_product
+
+ggplot(flagship_product)+
+  aes(x= Date, y = Amount)+
+geom_line()+
+  geom_point()
+```
+
+
+**Question 3. Make a line chart showing monthly revenue and costs over the last year. This data is also in qb_monthly_sales.**
+
+We first choose select the observation "Total Revenue" and "Cost" using the filter function. Then we plot the results over time. 
+```{r}
+monthly_revenue_and_costs <-filter(qb_monthly_sales, Cashflow == c("Total Revenue","Cost")) 
+monthly_revenue_and_costs
+
+ggplot(monthly_revenue_and_costs)+
+  aes(x= Date, y = Amount, color = Cashflow)+
+geom_line()+
+  geom_point()
+```
+
+
+
+
+**Question 4. Show annual sales of personal fitness trackers over the last 5 years broken down by company as a ribbon plot (use geom_area). This data is in qb_competitors.**
+
+```{r}
+qb_competitors
+```
+
+
+
+
+

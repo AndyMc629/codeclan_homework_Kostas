@@ -1,0 +1,57 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+
+## Selecting the right chart
+
+
+### 1 Learning Objectives
+
+The purpose of this lab:
+
++ Understand which types of chart are best for categorical and continuous data
++ Understand which types of chart are best for 1, 2, 3 and n variables
+
+### Pre-analysis
+
+We first load the necessary libraries:
+```{r}
+library(CodeClanData)
+library(tidyverse)
+library(ggplot2)
+```
+
+
+
+### Four categories
+####3.1 Comparison
+
+Create a suitable plot for the following three datasets:
+
+```{r}
+late_deliveries
+```
+
+
+
+```{r}
+ggplot(late_deliveries) +
+  aes(date, late_deliveries) +
+  geom_point() 
+```
+
+
+```{r}
+ggplot(late_deliveries) +
+  aes(date, y = late_deliveries) +
+  geom_point()
+```
+
+```{r}
+recovery_times
+```
+
+
+
