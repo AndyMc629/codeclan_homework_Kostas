@@ -1,0 +1,174 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+library(CodeClanData)
+library(tidyverse)
+```
+
+### Save the datadest into an objct
+```{r}
+game_sales <- game_sales
+#view(game_sales)
+```
+
+### Dimension of the dataset
+```{r}
+dim(game_sales)
+```
+
+### Variables (columns) of the dataset
+```{r}
+names(game_sales)
+```
+
+```{r}
+unique(game_sales$genre)
+```
+
+
+```{r}
+unique(game_sales$publisher)
+```
+
+```{r}
+unique(game_sales$developer)
+```
+
+
+
+```{r}
+unique(game_sales$platform)
+```
+
+
+```{r}
+game_sales %>% 
+  select(name,publisher, developer, platform, sales) %>% 
+  filter(publisher == "Nintendo") 
+```
+
+
+## Investigate the developers for Nintendo
+
+### Find in percentage, which other companies develop games for Nintendo 
+```{r}
+game_sales_Nintendo <- game_sales %>% 
+  select(name,publisher, developer, platform) %>% 
+  filter(publisher == "Nintendo") %>% 
+  group_by(developer) %>% 
+  summarise(count = n()) %>% 
+  mutate(percentage = round((count*100)/sum(count), 2))
+```
+
+### Plot the developer comapanies that developed games for the Nintendo
+```{r}
+game_sales_Nintendo <-
+mutate(game_sales_Nintendo, developer = fct_reorder(developer, percentage))
+
+game_sales_Nintendo %>% 
+  ggplot()+
+  aes(x= developer, y = percentage, fill = developer) +
+  geom_col()+
+  coord_flip()+
+  labs(title = "Developer companies that are used to make games for Nintendo")
+```
+
+
+## Investigate the sales for Nintendo with respect to their developers
+```{r}
+game_sales_copies <- game_sales %>% 
+  select(publisher, developer, year_of_release, sales) %>% 
+  filter(publisher == "Nintendo") %>%
+  group_by(developer) %>% 
+  summarise(copies_sales_in_millions= sum(sales)) %>% 
+  mutate(percentage = round((copies_sales_in_millions*100)/sum(copies_sales_in_millions), 4))
+```
+
+### Plot the developer comapanies that developed games for the Nintendo
+```{r}
+game_sales_copies<-
+mutate(game_sales_copies, developer = fct_reorder(developer, percentage))
+
+game_sales_copies %>% 
+  ggplot()+
+  aes(x= developer, y = percentage, fill = developer) +
+  geom_col()+
+  coord_flip()+
+  labs(title = "Number of copies sold in percentage")
+```
+
+
+
+## Investigate the sales for Nintendo with respect to their plattforfs
+
+### First find the number of games per platform
+```{r}
+game_per_platforms <- game_sales %>% 
+  select(publisher, developer, sales, platform) %>% 
+  filter(publisher == "Nintendo") %>%
+  group_by(platform) %>%
+  summarise(games_per_platform = n()) 
+
+game_per_platforms
+```
+
+### Then find the numeber of sales per platform
+```{r}
+game_sales_platforms <- game_sales %>% 
+  select(publisher, developer, sales, platform) %>% 
+  filter(publisher == "Nintendo") %>%
+  group_by(platform) %>%
+  summarise(sales = sum(sales)) 
+
+game_sales_platforms
+```
+
+# We join the two table
+```{r}
+platform_copies_and_sales <-left_join(game_per_platforms, game_sales_platforms, "platform")
+platform_copies_and_sales
+```
+
+### Number of copies sold by platform
+```{r}
+platform_copies_and_sales %>% 
+  ggplot()+
+  aes(x= platform, y = sales) +
+  geom_col() +
+  labs(title = "Number of copies")
+```
+
+```{r}
+game_sales %>% 
+  filter(publisher == "Nintendo") %>% 
+  ggplot()+
+  aes(x= platform, y = sales, fill = genre) +
+  geom_col() +
+  labs(title = "Number of copies")
+```
+
+
+```{r}
+game_sales %>% 
+  filter(publisher == "Nintendo") %>% 
+  ggplot()+
+  aes(x= genre, y = sales, fill = platform) +
+  geom_col() +
+  labs(title = "sales with respect to genre")
+```
+
+
+## Relation between sales and critics
+```{r}
+game_sales %>% 
+  filter(publisher == "Nintendo") %>% 
+  ggplot()+
+  aes(x= sales, y = user_score, colour = genre) +
+  geom_point() #+
+  #labs(title = "Number of copies")
+```
+
+
