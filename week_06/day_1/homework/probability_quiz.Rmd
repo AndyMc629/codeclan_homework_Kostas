@@ -1,0 +1,196 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+### Probability Quiz
+
+Load the required packages for this homework:
+```{r}
+library(prob)
+library(gtools)
+library(tidyverse)
+```
+
+*Question 1. If I roll a six-sided dice once, what is the probability of getting a number less than 5?*
+```{r}
+# sample spaxce when you roll a dice once
+sample_space_dice_once <- rolldie(1)
+
+# number of possible outcomes if you want a number less than 5  
+dice_less_than_five <- sample_space_dice_once %>% 
+  filter(X1 < 5)
+
+# probability of the outcome
+nrow(dice_less_than_five) / nrow(sample_space_dice_once)
+```
+
+The probability of getting a number less than 5 when a dice is rolled once is 2/3 = 0.666.
+
+*Question 2. How many outcomes are there in the sample space of an experiment in which we toss three dice?*
+```{r}
+# sample spaxce when you roll a dice three times
+sample_space_dice_three <- rolldie(3)
+
+sample_space_dice_three %>% 
+  summarise(sample_spice = n())
+```
+
+There are 216 possible outcomes if a dice is rolled three times.
+
+*Question 3. In an experiment where we roll four dice:*
+1. how many outcomes are in the event total_equals_5_6_7 (i.e. the total of the four dice equals 5, 6 or 7)?
+```{r}
+# sample space when you roll a dice four times
+sample_space_dice_four <- rolldie(4)
+
+total_equals_5_6_7 <- sample_space_dice_four%>% 
+mutate(colums_sum = X1 + X2 + X3 + X4) %>% 
+filter(colums_sum == 5 | colums_sum == 6 | colums_sum == 7)
+
+nrow(total_equals_5_6_7)
+```
+
+There are 34 outcomes where the summation of four dices will give either 5, 6 or 7.
+
+2. what is the probability of this event?
+```{r}
+nrow(total_equals_5_6_7) /nrow(sample_space_dice_four)
+```
+
+The probability where the summation of four dices will give either 5, 6 or 7 is 0.03 (3 d.p.)
+
+3. what assumptions do we apply in answering part iii?
+In *Question 3*, it was assumed that a different event is occured when a dice is rolled,  e.g. the same number is apperead when a single dice is rolled.
+
+*Question 4. Five chairs are placed in a row in a room, along with five people of differing height. The people sit down randomly on the chairs. What is the probability that they sit in order of decreasing height, left to right?:*
+
+```{r}
+# create vector of choices contains five peple, n = 10. 
+five_people <- c("Extreme Tall", "Very Tall", "Tall", "Medium Height", "Short")
+
+# Choose a combination of 5, r = 5
+possible_seats  <- as_tibble(permutations(n = 5, 
+                                  r = 5, 
+                                  v = five_people, repeats.allowed = FALSE))
+
+# probability that the 5 people sit in order of decreasing height (only possible once):
+1/nrow(possible_seats)
+```
+
+The probability that the five people sit in order of decreasing height is 0.008 (3 d.p).
+
+*Question 5. I roll six dice:*
+1. what is the probability I see the numbers 6, 5, 4, 3, 2 and 1 in order on the dice, left to right?
+```{r}
+# sample space when you roll a dice six times
+sample_space_dice_six <- rolldie(6)
+nrow(sample_space_dice_six)
+
+1/nrow(sample_space_dice_six)
+```
+2. what is the probability I see one each of the numbers 6, 5, 4, 3, 2 and 1 on the dice regardless of order?
+
+
+*Question 6.If I draw a single card from a 52-card deck, and it is black, what is the probability that its suit is spades?*
+```{r}
+cards_all <- cards()  
+nrow(cards_all)
+
+
+cards_spade <- cards_all %>% 
+  filter(suit == "Spade")
+probaA = nrow(cards_spade)/nrow(cards_all) # spade cards out of 52 
+
+probaB = 1/2 # black cards out of 52
+
+cards_black_spade <- probaA/ probaB 
+cards_black_spade
+```
+
+The probability that the card is spade, from a black pack, is 0.5 
+
+*Question 7.Eight patients: Alice, Bob, Carmen, Dinesh, Ella, Fergus, Gianna and Henry are waiting to see a doctor, but only five appointment slots are left today*
+1. In how many different orders can the doctor see patients today?
+```{r}
+# create vector of eight patients five peple, n = 8
+patients <- c("Alice", "Bob", "Carmen", "Dinesh", "Ella", "Fergus", "Gianna", "Henry")
+
+# Choose a combination of 5, r = 5
+possible_appointment  <- as_tibble(permutations(n = 8, 
+                                  r = 5, 
+                                  v = patients, repeats.allowed = FALSE))
+
+# rename the variables in the 'possible_appointment' tible (not necessary for the study)
+possible_appointment <- possible_appointment %>%
+  rename(
+    Slot_1 = V1,
+    Slot_2 = V2,
+    Slot_3 = V3,
+    Slot_4 =V4,
+    Slot_5 = V5
+  )
+
+nrow(possible_appointment)
+
+```
+
+There are 6720 different slots that the 8 patients can fill the 8 slots. 
+
+
+2. What is the probability of Gianna and Danesh both being seen today?
+```{r}
+Gianna_and_Dinesh <- possible_appointment %>% 
+  isin(c("Gianna","Dinesh"))
+
+sum(Gianna_and_Dinesh)/nrow(possible_appointment)
+```
+
+There is a probability of 0.36 (2 d.p) that Gianna and Danesh will be seen today.
+
+3. What is the probability of Gianna being seen before Dinesh today?
+```{r}
+Gianna_and_Dinesh_2 <- possible_appointment %>% 
+  isin(c("Gianna","Dinesh"), ordered = TRUE)
+
+ans1 <- sum(Gianna_and_Dinesh_2)/sum(Gianna_and_Dinesh) # provided they will both seen by the doctor
+ans2 <- sum(Gianna_and_Dinesh_2)/nrow(possible_appointment) # provided they will not seen by the doctor
+```
+
+The probability of Giana being seen before Dinesh is 0.5, provided that they will both seen by the doctor. Alternative, Gianna has a probability of 0.18 seen by the doctor before Dinesh in case all 8 patients are in the waiting list. 
+
+*Question 8.If order is not significant, how many ways are there to select a 5 student quiz team from a group of 8 students?*
+```{r}
+# use the combination function, where we have 8 students and we need a combination of 5 students. 
+
+# number of total students (assign by a number)
+number_of_students <- 1:8
+
+# use the combinations function
+five_students_combi <- combinations(n = 8, r = 5, v = number_of_students)
+
+# number of combinations
+nrow(five_students_combi)
+```
+
+```{r}
+# question 8 (alternative way) 
+five_students_combi_2 <- choose(8, 5)
+five_students_combi_2
+```
+
+*Question 9.How would your answer for question 8 change if a team captain had to be selected for each team?*
+```{r}
+# use the combination function, where we have 7 (out of 8) students and we need a combination of another 4 students to fill a team of 5. 
+
+# number of total students (assign by a number)
+number_of_students_2 <- 1:7
+
+# use the combinations function
+four_students_combi <- combinations(n = 7, r = 4, v = number_of_students)
+
+# number of combinations
+#nrow(five_students_combi)
+```
+
+This time, there are 35 combinations that can form a team of 5 out of 8 peple, provided one of those 8 students is always in the team.
