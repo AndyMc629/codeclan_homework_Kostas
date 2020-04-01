@@ -1,0 +1,134 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+# Distributions homework
+
+### Pre-analysis
+
+The database contains details of mobile phones and their customer reviews on an online shopping site. Each row in the data corresponds to one model of mobile phone. A statistical analysis is carried out to investigate the given dataset.
+
+The following packages are loaded in this work for our analysis.
+
+```{r}
+library(prob)
+library(tidyverse)
+library(janitor)
+library(skimr)
+```
+
+```{r}
+# read in dates as strings
+reviews_data <- read_csv("data/20190928-items.csv")
+```
+
+
+
+### MVP
+
+We first re-write the names from our dataset - we use the snake_case style
+```{r}
+# now let's use the clean_names() function
+clean_reviews_data <- clean_names(reviews_data)
+head(clean_reviews_data,2)
+```
+
+
+
+*Question: Find the brand with the highest numbers of phones in the dataset.*
+```{r}
+number_of_phones <- clean_reviews_data %>% 
+  select(brand) %>% 
+  group_by(brand) %>% 
+  summarise(highest_number_of_phones = n()) %>% 
+  arrange(desc(highest_number_of_phones))
+```
+
+
+The highest number of phones in the data belong to Samsung with 397 phone cells. Apple and Motorola are coming second and third, respectively, with 101 and 100 phones. OnePlus has only 7 phones in the dataset. 
+
+
+*Question: For your top brand, plot the distribution of phone ratings as a probability density, overlaying a fitted normal distribution. Do you think the normal distribution provides a good model of these ratings?*
+
+The Samsung phones are storaged in an object called **samsung_phones**.
+```{r}
+samsung_phones <- clean_reviews_data %>% 
+  select(brand, rating, prices) %>% 
+  filter(brand == "Samsung")
+```
+
+Some statistical analysis is carried out first for the Samsung phones. The folowing command is used to get the statistical information (note, the skim( ) function can be also used).
+The customer-review-rating of Samsung phones has a mean value of 3.57 and a median of 3.6. The standard deviation is 0.685. Its IQR is 0.6 and the range between the minimum and maximum value of the customer-review-rating is, respectively, 1 and 5.
+```{r}
+samsung_phones_stats <- samsung_phones %>%
+  summarise(
+    num = n(),
+    mean = mean(rating),
+    sd = sd(rating),
+    Q0 = quantile(rating, 0.00),
+    Q1 = quantile(rating, 0.25),
+    Q2 = quantile(rating, 0.50),
+    Q3 = quantile(rating, 0.72),
+    Q4 = quantile(rating, 1.00),
+    IQR = Q3-Q1
+  )
+samsung_phones_stats
+```
+
+The histogram of the probabbility density of Samsung phones with respect to their customer-review-rating is presented below alomng with a fitted normal distribution. The customer-review-rating is divided into 10 intervals. 
+```{r}
+samsung_phones %>% 
+  ggplot()+
+  aes(x = rating) +
+  geom_histogram(aes(y = ..density..),col = "white", bins = 10)+
+  stat_function(
+    fun = dnorm, 
+    args = list(
+      mean = samsung_phones_stats$mean, 
+      sd = samsung_phones_stats$sd
+    ),
+    col = "red"
+  )
+  
+```
+
+As can be seen, the probability density of Samsung phones with respect to the customer-review-rating has a unimodal behaviour and has left-skewed distribution (the mean value is smaller than median).As shown, the highest probability density of Samsung phones comes from the customer-review-rating between 3.5 and 4.5. This is somehow expected, as cutomers tend to buy, in general, phones with good high rating reviews. 
+
+
+*Question: We can be more quantitative in comparing the distribution of top brand ratings with a normal distribution. Use the mean() and sd() to calculate the proportions of ratings within one-, two- and three standard deviations of the mean. Compare these proportions with those you expect for a normal distribution.*
+
+We first define a normal distribution and we calculate the proportions of ratings within:
+
+one-standard deviations of the mean (68.3%), 
+```{r}
+100 * (pnorm(q = 1) - pnorm(q = -1))
+```
+
+two-standard deviations of the mean (95.4%)
+```{r}
+100 * (pnorm(q = 2) - pnorm(q = -2))
+```
+
+and three-standard deviations of the mean (99.8%)
+```{r}
+100 * (pnorm(q = 3) - pnorm(q = -3))
+```
+
+
+We now define the proportions of ratings from the Samsung phones within:
+
+one-standard deviations of the mean (0.0065%), 
+```{r}
+100 * (pnorm(q = 1, mean =3.6, 0.68) - pnorm(q = -1, mean =3.6, 0.68))
+```
+
+two-standard deviations of the mean (0.93%)
+```{r}
+100 * (pnorm(q = 2, mean =3.6, 0.68) - pnorm(q = -2, mean =3.6, 0.68))
+```
+
+and three-standard deviations of the mean (18.9%)
+```{r}
+100 * (pnorm(q = 3, mean =3.6, 0.68) - pnorm(q = -3, mean =3.6, 0.68))
+```
