@@ -1,0 +1,155 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+# Homework - CIs
+
+### Section 1: MVP
+Now we’ll go back to CI creation in the normal fashion. We’ll take the 'ames' data from the CIs lab earlier today and regard it now as a sample, we won’t be drawing any smaller samples from within it. This is the usual situation in an analysis: you use all the data available to you!
+
+```{r}
+library(tidyverse)
+library(janitor)
+library(infer)
+library(e1071)
+```
+
+
+*Load the data again, clean_names(), and re-familiarise yourself with it*
+
+Let's get the dataset.
+```{r}
+ames <- read_csv("data/ames.csv")
+ames <- clean_names(ames)
+```
+
+
+
+*Investigate the distribution of lot_area. Is the distribution roughly normal? If not, what problems do you find?*
+```{r}
+ames %>% 
+  select(lot_area) %>% 
+  ggplot() +
+  aes(x = lot_area) +
+  geom_histogram(col="white", bins=30)
+```
+
+```{r}
+ames %>% 
+  select(lot_area) %>% 
+  summarise(skewness_dist = skewness(lot_area, type =1))
+```
+
+The distirbution is unimodal and highly left-skewed.
+
+*Compute and visualise a bootstrap sampling distribution for the mean(lot_area) of the sold houses.*
+First, let's get a sample from our dataset. We get a sample of 300 observations. 
+```{r}
+single_sample_300 <- ames %>% 
+  rep_sample_n(size = 300, reps = 1) %>% 
+  ungroup() %>% 
+  select(lot_area)
+```
+
+Now, we will apply bootsrapping the single sample.
+```{r}
+bootstrap_rep_sample_300 <- single_sample_300 %>% 
+  specify(response = lot_area) %>% 
+  generate(reps = 10000, type = "bootstrap") %>% 
+  calculate(stat = "mean")
+```
+
+```{r}
+bootstrap_rep_sample_300 %>% 
+  ggplot()+
+  aes(x = stat)+
+  geom_histogram(col = "white")
+```
+
+
+*Use your bootstrap distribution to calculate a 95% CI for mean(lot_area), and visualise it on the distribution*
+
+```{r}
+bootstrap_lot_area_ci <- bootstrap_rep_sample_300 %>% 
+  get_confidence_interval(level = 0.95, type = "percentile")
+bootstrap_lot_area_ci
+```
+
+
+```{r}
+bootstrap_rep_sample_300 %>% 
+  visualise(bins = 30) +
+  shade_confidence_interval(endpoints = bootstrap_lot_area_ci)
+```
+
+
+*You would like to know the mean(lot_area) of the sold houses with higher confidence. Calculate the 99% CI for this variable (you can re-use your bootstrap distribution from above). Is it narrower or broader than the 95% CI? Does that make sense?*
+
+```{r}
+bootstrap_lot_area_ci_99 <- bootstrap_rep_sample_300 %>% 
+  get_confidence_interval(level = 0.99, type = "percentile")
+bootstrap_lot_area_ci_99
+```
+
+
+```{r}
+bootstrap_rep_sample_300 %>% 
+  visualise(bins = 30) +
+  shade_confidence_interval(endpoints = bootstrap_lot_area_ci_99)
+```
+
+It can be seen now that the confidence interval is wider, therefore there is higher possibility that the mean from our sampling will be included in the interval.
+
+*Calculate the point estimate of the mean(lot_area)*
+
+We also calculate the mean from our bootstrap sampling distribution. 
+```{r}
+bootstrap_rep_sample_300 %>%
+  summarise(mean(stat))
+```
+
+### Section 2: Extension (Still working on it)
+
+Calculate a point estimate and 95% CI for the proportion of houses in the data built before 1920. Does the number of reps you use matter? [Investigate reps from 200 up to 50000, memory of your laptop permitting]. 
+
+First, let's rewrite the colulmn year_built into "Yes" (if houses build before 1920) or "No" otherwise.
+```{r}
+ames_old_houses <- ames %>% 
+  mutate(year_built_new = ifelse(year_built < 1920, "Yes", "No")) 
+```
+
+Now, let's get a sample from our new column, called *ames_old_houses*. We get a sample of 200 observations.column **year_built**. 
+```{r}
+single_sample_year_built <- ames_old_houses %>% 
+  rep_sample_n(size = 200, reps = 1)  
+```
+
+We now use bootstrap.
+```{r}
+bootstrap_rep_year_built <- single_sample_year_built %>%
+  specify(response = year_built_new, success = "Yes") %>%
+  generate(reps = 200, type = "bootstrap") %>%
+  calculate(stat = "prop")
+```
+
+```{r}
+bootstrap_prop_ci <- bootstrap_rep_year_built %>% 
+  get_confidence_interval(level = 0.95, type = "percentile")
+bootstrap_prop_ci
+```
+
+```{r}
+bootstrap_rep_year_built %>% 
+  visualise(bins = 30) +
+  shade_confidence_interval(endpoints = bootstrap_prop_ci)
+```
+
+
+We also calculate the mean from our bootstrap sampling distribution. 
+```{r}
+bootstrap_rep_year_built %>%
+  summarise(mean(stat))
+```
+
+** We now repeat the proces with more reps, for example 1000 times. Then with 2000, 3000 and so on, up t0 5000 times**
