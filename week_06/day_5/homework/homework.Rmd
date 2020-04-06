@@ -1,0 +1,80 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+# Hypothesis tests & probability - homework
+
+You work for an animal conservation organisation and are looking to do some investigating into some of the animals to provide evidence for some projects you are looking to run.
+
+In this homework we’ll use the msleep data set provided in the ggplot package. It concerns the sleeping patterns of various types of mammal.
+
+
+```{r}
+library(tidyverse)
+library(janitor)
+library(infer)
+data(msleep)
+```
+
+
+*Explore the dataset and familiarise yourself with it.*
+
+```{r}
+head(msleep)
+```
+
+
+*Jabberwockies sleep for around 7 hours a night, on average. Perform an appropriate statistical test to determine whether the mean sleep_total in the sampled population of animal types differs from the typical value for jabberwockies.*
+
+First, we want to get the mean of sleep-hours (from our sample) that correspond to all kind of Jabberwockies.
+```{r}
+observed_stat <- msleep %>%
+  summarise(mean_sleep_hours = mean(sleep_total))
+
+observed_stat
+```
+
+The mean value for all of the animals in the sampled population is 10.43 hours, which is way higher than the Jabberwockies sleep of 7 hours. But, is it difference significant enough?  
+
+For this reason, we set up our hypothesis:
+Ho: mu(Jabberwockies_sleep) = 7 hours
+Ha: mu(Jabberwockies_sleep) != 7 hours
+
+```{r}
+null_distribution_Jabberwockies <- msleep %>%
+  
+# step 1:it gets the column we are looking for 
+  specify(response = sleep_total) %>%  
+  
+# step 2: it sets mu = 3.93 (null hypothesis)  
+  hypothesize(null = "point", mu = 7.0) %>%  
+
+# step 3: we use bootstrap    
+  generate(reps = 10000, type = "bootstrap") %>%
+  calculate(stat = "mean")
+```
+
+
+Now we can visualise the null distribution:
+```{r}
+null_distribution_Jabberwockies %>%
+  visualise(bins = 30)
+```
+
+
+```{r}
+null_distribution_Jabberwockies %>%
+  visualise(bins = 30) +
+# we add the statitsics (sample mean)
+  shade_p_value(obs_stat = observed_stat$mean_sleep_hours, direction = "both") 
+```
+
+And finally, we get the p-value.
+```{r}
+p_value <- null_distribution_Jabberwockies %>%
+  get_p_value(obs_stat = observed_stat$mean_sleep_hours, direction = "both")
+p_value
+```
+
+Since the p-valu is 0, we reject the null hypotheis and we conlude that the mean sleep- hours of Jabberwockies is not 7 hours.
