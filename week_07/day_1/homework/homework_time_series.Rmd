@@ -1,0 +1,201 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+# Homework
+
+The foillowing packages are required for the homework.
+```{r}
+library(dplyr)
+library(lubridate)
+library(tidyverse)
+library(tsibble)
+library(tsibbledata)
+library(feasts)
+```
+
+### Section 1: Dates and Times
+
+The considered variables will be used in this section for our analysis.
+```{r}
+date1 <- ymd_hms("2017-04-22 22:01:18")
+```
+
+```{r}
+date2 <- ymd_hms("2001-11-07 10:09:56")
+```
+
+*Question 1: Extract the different components (year, month, mday, yday, wday) from the variable date1. Add the labels to the month and do not abbreviate the month labels.*
+
+In the first example, the functions **year()**, **month()**, **mday()** and **yday()**. Moore functions are available, such as, **hours()**, **minutes()** and **seconds()** but are not used in this study. 
+```{r}
+year(date1) 
+month(date1) 
+mday(date1) #(day of the month) 
+yday(date1) #(day of the year)
+wday(date1) #(day of the week)
+```
+
+```{r}
+year(date2) 
+month(date2) 
+mday(date2) #(day of the month) 
+yday(date2) #(day of the year)
+wday(date2) #(day of the week)
+```
+
+
+*Question 2 : Add 14 days to your date1 variable and store it in a variable called next_fortnight. Take away 10 years from your date2 variable, and store it in previous_decade.* 
+
+```{r}
+next_fortnight <- date1 + days(14)
+```
+
+```{r}
+previous_decade <- date2 - years(10)
+```
+
+
+*Question 3: Create a variable called this_year which contains today’s date. Then create an interval object which uses this_year and the previous_decade variable you made above. Store it in interval_years. Hint: you’ll need to use lubridate::interval in order to get the right function, as tsibble has one too.*
+
+In this example, an object is created, which is called **this_year**. It contains today's date.
+```{r}
+this_year <- now()
+```
+
+Finally, an interval-object is created, which is called *interval_years*. It is given by
+```{r}
+interval_years <- this_year %--% previous_decade
+```
+
+
+*Question 4: Change the time zone of both your date variables to “America/New_York”, and call them nyc_date1 and nyc_date2.* 
+
+```{r}
+nyc_date1 <- ymd_hms("2017-04-22 22:01:18", tz = "America/New_York")
+nyc_date2 <- ymd_hms("2001-11-07 10:09:56", tz = "America/New_York")
+```
+
+*Question 5: Use the flights data from the nycflights13 dataset. Make a date-time column called departure_date from the year, month, day, hour, and minute variables in the flights tibble. *
+```{r}
+library(nycflights13)
+flights
+```
+
+A object is created which includes a variable called *departure_date*. The variable *departure_date* is in the format "year-month-day-hour-minute".
+```{r}
+departure_flights <- flights %>%
+  mutate(departure_date = make_datetime(year, month, day, hour, minute))
+```
+
+
+
+### Section 2: Time series familiarity
+
+This study deals with **New York flights** which contain five different datasets: 
+1. airlines: airline names
+2. airports: metadata about airports
+3. flights: on time flight data for all flights that departed NYC
+4. planes: plane metadata for plane tailnumbers
+4. weather: hourly meterological data
+
+*Question 6: Start with the weather data from the nycflights13 package. Select all the variables related to temperature, humidity, and precipitation, and pick out the key and index variables. Have a look at your data, and write a small description of the time series you observe.*
+
+Let's first load the **weather** dataset. It is has 26115 observations and 15 variables.
+```{r}
+weather
+```
+
+The **weather** dataset shows all the flights for the year 2013, that are departured from three main big airports in US. These are:
+1. LGA (LaGuardia Airport)
+2. EWR (Newark Liberty International Airport)
+3. JFK (John Fitzgerald Kennedy Airport)
+
+The dataset includes the time of the departure (in the format *year-month-day-hour*), and the temperatute at the day of the departure. 
+
+The variables related to temperature, humidity, and precipitation are selected and storaged in an object, called **weather_data**. The **time_hour** variable is also selected.
+```{r}
+weather_data <- weather %>% 
+  select(time_hour, origin, temp, humid, precip)
+```
+The key variable is the **origin** and the index variable is the **time_hour**.
+
+*Question 7: Change the weather data into a tsibble.*
+We change the weather dataset into tsibble by using the **as_tsibble** function.
+```{r}
+weather_data <- as_tsibble(weather_data, key = origin)
+
+class(weather_data)
+```
+
+
+*Question 8: Add a year and month column to your weather data, and create a basic line plot which shows the temperature data from each airport over time. Have a think back to what you learned in visualisation week, and think about whether plotting the whole time series in one go is adequate here? Write down your suggestions for what could be done to make a better and more informative plot.*
+
+A new column is created - the new dataset is storaged into an objetc called **weather_data_year**. It includes the "year" of that the flights occured. 
+```{r}
+weather_data_year <- weather_data %>%
+  mutate(year = year(time_hour))
+```
+ 
+The Temperature corresponding to each hour (24 hours), for each day, is presented for a period of 12 months.
+```{r}
+ggplot(weather_data %>% 
+  filter(origin == "EWR")) + 
+  geom_line(aes(x = time_hour, y = temp), colour = "purple")
+```
+ 
+ We repeat the process, but now the results are illustrated by date (rather than hour). The graph is shown below:
+```{r}
+# aggregate by date
+weather_data_date <- weather_data %>%
+  index_by(date = ~ as_date(.)) %>%
+  summarise(temp_mean = mean(temp, na.rm = TRUE))
+
+# make a plot
+ggplot(data = weather_data_date, aes(x = date, y = temp_mean)) +
+  geom_line() 
+```
+
+
+*Question 9:Choose an appropriate rolling window and calculate a moving average for your weather temperature data for each airport origin. Create a useful plot which overlays the original time series data and the rolling average data. Make sure the graph is easy for others to understand (Hint: you might want to facet_wrap). Finally, write a summary of why you chose the time window you did, and describe any trends you see.*
+
+```{r}
+# calculate a rolling window 
+weather_data_rolling <- weather_data %>% 
+  group_by_key() %>% 
+  mutate(temp_ma = slide_dbl(temp, ~ mean(., na.rm = TRUE), .size = 1000))
+
+# plot the data 
+ggplot(weather_data_rolling) + 
+  geom_line(aes(x = time_hour, y = temp), colour = "grey") + 
+    geom_line(aes(x = time_hour, y = temp_ma), colour = "red")
+```
+
+*Question 10:Downsample your data so that you plot daily temperature data for each airport, instead of hourly data.*
+
+The temperature is finally ploted, for each airport, with respect to the year. However, the temperatute is presented by hours.
+```{r}
+weather_data_by_airport <- weather_data %>%
+  group_by(origin) %>%
+  summarise(Temperatute = sum(temp))
+
+weather_data_by_airport %>% 
+  autoplot(Temperatute) + 
+  xlab("Year")
+```
+
+The plot is now repeated, but this time the temperatute is ploted for each day, from January 2013 up to January 2014.
+```{r}
+weather_data_by_airport <- weather_data %>%
+  index_by(date = ~ as_date(.)) %>%
+  group_by(origin) %>%
+  summarise(Temperatute = sum(temp))
+
+weather_data_by_airport %>% 
+  autoplot(Temperatute) + 
+  xlab("Year")
+```
+
+
+
