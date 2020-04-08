@@ -1,0 +1,139 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+# Homework
+This homework will recap basic time series, time series modelling, and spatial visualisation.
+
+The following libraries are required for thgis study:Y:
+```{r}
+library(tidyverse)
+library(lubridate)
+library(tsibble)
+library(tsibbledata)
+library(fable)
+library(urca)
+```
+
+
+*Question 1: Load in the nyc_bikes data from the tsibbledata package. Have an initial look at it to see what you’re working with. Create three new columns: one that stores only the year the bike was used, one that stores only the month the bike was used, and one that stores the date. Use the data stored in start_time to create these new columns.*
+
+```{r}
+nyc_bikes
+class(nyc_bikes)
+```
+
+
+```{r}
+nyc_bikes_updated <- nyc_bikes %>% 
+mutate(year = year(start_time), 
+       month = month(start_time),
+       date = day(start_time)) 
+```
+
+
+
+*Question 2: Summarise the number of bike hire counts by month. Make a plot of this data.*
+```{r}
+# aggregate by a month
+nyc_bikes_by_month <- nyc_bikes_updated%>%
+  index_by(month) %>%
+  summarise(hire_bike = n(), na.rm = TRUE) 
+
+# make a plot
+nyc_bikes_by_month %>% 
+  ggplot()+
+  aes(x= month, y = hire_bike) +
+  geom_line() +
+  geom_point() +
+  xlab("month")
+```
+
+The plot shows the number of bike hire in the New York city, for each month in 2018. The first point corresponds to the month January and the last point corresponds to December. As shown, the number of bike hire increases in the sprimng time and reaches the highest value, around 750, in August. This is expected, as cyclists tend to ride a bike in better weather conditions. Moreover, there is a higher number of tourists during the summer holiday and tourists often use hire bikes. The number of hire-bikes decreases after August. The data from the plot are not sufficient enought in order to predict a behaviour of hire bikes in the next couple of years.  
+
+*Question 3: Now Summarise the number of bike hire counts by date. Make a plot of this new aggregated data. What does this plot tell you about the time series? Would this data be preferrable for time series forecasting compared to the monthly data?* 
+
+```{r}
+# aggregate by a date
+nyc_bikes_by_date <- nyc_bikes_updated %>%
+  index_by(date) %>%
+  summarise(hire_bike = n(), na.rm = TRUE) 
+
+# make a plot
+nyc_bikes_by_date %>% 
+  ggplot()+
+  aes(x= date, y = hire_bike) +
+  geom_line() +
+  geom_point() #+
+  xlab("date")
+```
+
+This plot illustrates the number of bike hire in the New York city. Each point corresponds to a monthly day. The number of hire-bikes in is summarised for each day of the month, for 12 months. It is shown that the highest number of hire bikes occures on the 15th and 29th of each month.  The lowest number of hire bikes is occured on the 8th, 25th and 31st of each month. This figure is preferable for time series forecasting. 
+
+**Note, a second figure is also ploted which shows the number of bikes in each individual day. **
+```{r}
+# aggregate by date
+nyc_bikes_by_date_2 <- nyc_bikes%>%
+  index_by(date = ~ as_date(.)) %>%
+  summarise(hire_bike = n(),na.rm = TRUE) 
+
+# make a plot
+ggplot(data = nyc_bikes_by_date_2, aes(x = date, y = hire_bike)) +
+  geom_line()
+```
+
+
+*Question 4: Let’s begin to build a model. For this, we will test the NAIVE, MEAN, and SNAIVE model.*
+
+```{r}
+library(urca)
+```
+
+
+```{r}
+# fill the gaps : here i'll use median as it's a decent summary of how bike rentals work (not overly affected by seasonal changes)
+nyc_bikes_filled <- nyc_bikes_by_date %>%
+  fill_gaps(bike_hire_counts = as.integer(median(bike_hire_counts)))
+```
+
+
+```{r}
+# create a fit dataset which has the results from our three different models for beer production in australia
+fit <- nyc_bikes_by_date %>%
+  model(
+    snaive = SNAIVE(nyc_bikes_by_date),
+    mean_model = MEAN(nyc_bikes_by_date),
+    arima = ARIMA(nyc_bikes_by_date)
+  )
+fit 
+```
+
+
+
+*Question 5:Now we have our model fit, build a forecast to predict bike use over the next four months. Plot your models alongside your data.*
+
+The code below is forecasting for the next 120 observations (days). Therefore, the forecasting parameter, *h*, is chose to be 120. 
+```{r}
+forecast_1 <- fit %>%
+  fabletools::forecast(h = 120)
+forecast_1
+```
+
+The forecast behaviour is shown below: 
+```{r}
+forecast_1 %>%
+  autoplot(nyc_bikes_by_date, level = NULL) +
+  ggtitle("Forecasts for New York bike hiring in the next four months") +
+  xlab("Month") +
+  guides(colour = guide_legend(title = "Forecast"))
+```
+
+
+*Question 6: Test your model accuracy : choose a training data set from your main dataset, build a forecast on the training set, and then plot the training set forecast against the real data. Calculate model accuracy.*
+
+```{r}
+
+```
+
+
