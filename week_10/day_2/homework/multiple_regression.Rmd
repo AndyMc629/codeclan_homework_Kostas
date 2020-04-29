@@ -1,0 +1,210 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+# Features and elements of multiple regression
+
+### Section 1: MVP
+
+```{r}
+library(tidyverse)
+library(janitor)
+library(GGally)
+library(modelr)
+library(broom)
+library(ggfortify)
+library(infer)
+library(fastDummies)
+library(mosaicData)
+library(ggiraphExtra)
+```
+
+
+The diamond dataset from *Kaggle page* is considered for this study. 
+```{r}
+diamonds_data <- read_csv("data/diamonds.csv")
+```
+
+A statistical summary is shown below. The dataset includes 53940 diamond pieces. It also includes price and weight of each diamond as well as their characteristics, such as colour and clarity. In total, there are 10 variables to consider in the study.   
+```{r}
+summary(diamonds_data)
+```
+
+
+First, the variable **carat** is examined with respect to the physical dimensional variables, **x**, **y** and **z**. For example, it is interesting to investigate if there is any correlation between the physical dimensional variables and **carat**. The function *ggpairs( )* is used to plot the results.
+```{r, warning=FALSE, message=FALSE}
+ggpairs(diamonds_data)
+```
+
+Looking at the above plot, it can be concluded that that **carat** is strongly correlated with the three dimensional varables. The correlation value between **carat** and dimensional varables is given in the following table:
+
+|       | x    | y    | z    |
+|-------|------|------|------|
+| carat | 0.98 | 0.95 | 0.95 |
+
+It is also interesting to compare each variable separately using the *ggplot( )* function. The plots are shown below.
+```{r}
+diamonds_data %>%
+  ggplot(aes(x = carat, y = x)) +
+  geom_point() 
+```
+The plot between **carat** and **y**.
+```{r}
+diamonds_data %>%
+  ggplot(aes(x = carat, y = y)) +
+  geom_point() 
+```
+And finally, the plot of **carat** and the **z** variable.
+```{r}
+diamonds_data %>%
+  ggplot(aes(x = carat, y = z)) +
+  geom_point() 
+```
+
+
+In the next study, the dimensional variables are dropped from the dataset. 
+```{r}
+diamonds_data <- diamonds_data %>%
+  select(-c(x,y,z))
+```
+
+The *ggpairs()* function is reconsidered in order to examine if there is any strong relation between the **price** and other variables from the dataset. 
+```{r, warning=FALSE, message = FALSE}
+ggpairs(diamonds_data)
+```
+
+As shown, there is a possible relation between **price** and **carat** but the figure is not really clear. Therefore, a *ggplot()* visualisation is further applied to those two variables. As shown in the plot, **price** and **carat** variables are correlated - the correlation value is 0.92.
+```{r}
+diamonds_data %>%
+  ggplot(aes(x = price, y = carat)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE)
+```
+
+```{r}
+diamonds_data %>% 
+  summarise(correlation_value = cor(price, carat))
+```
+
+Furter analysis is carried out where the **price** variable is now examined with the **depth** and **table** variables. The plots below show that those three variables are not correlated. 
+```{r}
+diamonds_data %>%
+  ggplot(aes(x = price, y = depth)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE)
+
+diamonds_data %>% 
+  summarise(correlation_value = cor(price, depth))
+```
+
+```{r}
+diamonds_data %>%
+  ggplot(aes(x = price, y = table)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE)
+
+diamonds_data %>% 
+  summarise(correlation_value = cor(price, table))
+```
+
+
+
+In the next study, the categorical predictors from the dataset, such as **colour**, **cut** and **quality** are examined. For example, the **cut** variable depends in the following elements, *Fair*, *Good*, *Very Good*, *Premium* and *Ideal*. Transforming the **cut** variable into a dummy variable, we end up having 4 new dummy variables. Note, the *Fair* variable is exluded from the data because it is depended from the other four dummy variables (e.g. a linear combination of four varibles can generate the *Fair* variable).
+```{r}
+diamonds_cut_dummy <- diamonds_data %>% 
+  dummy_cols(select = "cut", remove_first_dummy = TRUE,
+                        remove_selected_columns = TRUE)
+
+diamonds_cut_dummy
+```
+
+The same transformartion process is applied to the **color** and **clarity** variable. There are in total 7 (6+1) dummy variables realted with **color** and 8 (7+1) dummy variables related with **clarity**.
+```{r}
+diamonds_color_dummy <- diamonds_data %>% 
+  dummy_cols(select = "color", remove_first_dummy = TRUE,
+                        remove_selected_columns = TRUE)
+
+diamonds_color_dummy 
+```
+
+```{r}
+diamonds_clarity_dummy <- diamonds_data %>% 
+  dummy_cols(select = "clarity", remove_first_dummy = TRUE,
+                        remove_selected_columns = TRUE)
+
+diamonds_clarity_dummy 
+```
+
+
+Going forward we’ll let R handle dummy variable creation for categorical predictors in regression fitting (remember lm() will generate the correct numbers of dummy levels automatically, absorbing one of the levels into the intercept as a reference level)
+
+
+In the last study, a simple linear regression is used for the variables **price** and **carat**. The regression diagnostics is checked.
+```{r}
+model_price_carat <- lm(formula = price ~ carat, data = diamonds_data)
+summary(model_price_carat)
+```
+
+And now the residulas are plotted. The Q-Q plot shows that the residuals diverge away from the line at both end-intervals. 
+```{r}
+par(mfrow = c(2,2))
+plot(model_price_carat)
+```
+
+
+The *log( )* function is applied to the **price** and **carat** variables and a regression analysis and diagnostics are re-investigated.
+```{r}
+diamonds_data_log <- diamonds_data %>% 
+  mutate(carat = log(carat)) %>% 
+  mutate(price = log(price))
+```
+
+```{r}
+diamonds_data_log %>% 
+  ggplot(aes(x = price, y = carat)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE)
+```
+
+Run the diagnostics and plot the residual plots. As shown from the statistical summary,
+the coefficients b0 and b1 are significant not zero (p values = 0) and the *r^2* value is 0.93.
+```{r}
+model_price_carat_log <- lm(formula = price ~ carat, data = diamonds_data_log )
+summary(model_price_carat_log)
+```
+
+The three residual plots now satisfy the necessary conditions. 
+```{r}
+par(mfrow = c(2,2))
+plot(model_price_carat_log)
+```
+
+
+
+
+
+
+
+model2 <- lm(volume ~ avgtemp + weekday, data = RailTrail_trim)
+
+A new object, called **diamonds_data_log2** is created. It transforms the **price** and **carat** variables into a logarithmic scale and it includes the dummy **cut** variables.
+```{r}
+diamonds_data_log2 <- diamonds_cut_dummy %>% 
+  mutate(carat = log(carat)) %>% 
+  mutate(price = log(price))
+```
+
+
+```{r}
+model_price_carat_log2 <- lm(formula = price ~ carat + cut_Ideal, data = diamonds_data_log2)
+
+summary(model_price_carat_log2)
+```
+
+
+
+ 
+
+ 
+ 
