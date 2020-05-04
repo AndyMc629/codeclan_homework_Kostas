@@ -42,7 +42,9 @@ number_of_phones <- clean_reviews_data %>%
   select(brand) %>% 
   group_by(brand) %>% 
   summarise(highest_number_of_phones = n()) %>% 
-  arrange(desc(highest_number_of_phones))
+  arrange(desc(highest_number_of_phones)) 
+
+
 ```
 
 

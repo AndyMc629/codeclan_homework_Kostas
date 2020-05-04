@@ -1,6 +1,6 @@
-library(tidyverse)
-library(shiny)
-library(CodeClanData)
+#library(tidyverse)
+#library(shiny)
+#library(CodeClanData)
 
 # Sales
 game_sales_copies <- game_sales %>% 

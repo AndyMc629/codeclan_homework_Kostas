@@ -49,6 +49,7 @@ diamonds_data %>%
   ggplot(aes(x = carat, y = x)) +
   geom_point() 
 ```
+
 The plot between **carat** and **y**.
 ```{r}
 diamonds_data %>%

@@ -1,6 +1,6 @@
-library(tidyverse)
-library(shiny)
-library(CodeClanData)
+#library(tidyverse)
+#library(shiny)
+#library(CodeClanData)
 
 # Find the developers for Nintendo
 game_sales_Nintendo <- game_sales %>% 

@@ -1764,48 +1764,45 @@ library(tidyverse)</code></pre>
 <p><em>Question 1. If I roll a six-sided dice once, what is the probability of getting a number less than 5?</em></p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc2FtcGxlX3NwYWNlX2RpY2Vfb25jZSA8LSByb2xsZGllKDEpXG5cbiMgbnVtYmVyIG9mIHBvc3NpYmxlIG91dGNvbWVzIGlmIHlvdSB3YW50IGEgbnVtYmVyIGxlc3MgdGhhbiA1ICBcbmRpY2VfbGVzc190aGFuX2ZpdmUgPC0gc2FtcGxlX3NwYWNlX2RpY2Vfb25jZSAlPiUgXG4gIGZpbHRlcihYMSA8IDUpXG5cbiMgcHJvYmFiaWxpdHkgb2YgdGhlIG91dGNvbWVcbm5yb3coZGljZV9sZXNzX3RoYW5fZml2ZSkgLyBucm93KHNhbXBsZV9zcGFjZV9kaWNlX29uY2UpXG5cbmBgYCJ9 -->
-<pre class="r"><code>sample_space_dice_once &lt;- rolldie(1)
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBzYW1wbGUgc3BheGNlIHdoZW4geW91IHJvbGwgYSBkaWNlIG9uY2VcbnNhbXBsZV9zcGFjZV9kaWNlX29uY2UgPC0gcm9sbGRpZSgxKVxuXG4jIG51bWJlciBvZiBwb3NzaWJsZSBvdXRjb21lcyBpZiB5b3Ugd2FudCBhIG51bWJlciBsZXNzIHRoYW4gNSAgXG5kaWNlX2xlc3NfdGhhbl9maXZlIDwtIHNhbXBsZV9zcGFjZV9kaWNlX29uY2UgJT4lIFxuICBmaWx0ZXIoWDEgPCA1KVxuXG4jIHByb2JhYmlsaXR5IG9mIHRoZSBvdXRjb21lXG5ucm93KGRpY2VfbGVzc190aGFuX2ZpdmUpIC8gbnJvdyhzYW1wbGVfc3BhY2VfZGljZV9vbmNlKVxuYGBgIn0= -->
+<pre class="r"><code># sample spaxce when you roll a dice once
+sample_space_dice_once &lt;- rolldie(1)
 
 # number of possible outcomes if you want a number less than 5  
 dice_less_than_five &lt;- sample_space_dice_once %&gt;% 
   filter(X1 &lt; 5)
 
 # probability of the outcome
-nrow(dice_less_than_five) / nrow(sample_space_dice_once)
-</code></pre>
+nrow(dice_less_than_five) / nrow(sample_space_dice_once)</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDAuNjY2NjY2N1xuIn0= -->
-<pre><code>[1] 0.6666667</code></pre>
-<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <p>The probability of getting a number less than 5 when a dice is rolled once is 2/3 = 0.666.</p>
 <p><em>Question 2. How many outcomes are there in the sample space of an experiment in which we toss three dice?</em></p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbImRhdGEuZnJhbWUiXSwibmNvbCI6MSwibnJvdyI6MX0sInJkZiI6Ikg0c0lBQUFBQUFBQUExMVBXdzZDTUJCY0hzVkFmQ1dlQTM3MHd3TVlEMkEwNGM5VXFFb3NMYUVsZWxSUGd5NmtUYlJmdXp1Wm1aMDU3UEoxa2ljQUVFQVErUkFRWElHY2p2dDBDeEQ2ZUhnUVFqek1GNUpXSXdBd00vUHRrSWlnTlZPNExIL0FxYUoxdzlsWk5WWEJIRUhjeW1kbVJkYlZjMTBMVHBYcm1wUlUwK3phb2hhdjNwRk1aS01yS1ZEa0Q1bUpJL1phQjFoMFlraFJwc1c5RTQ5ME16d3dhZUEvbVp2Uy94Z3JZcXdpSm02VllEWTdweGZHelRISHRtUFpyR2tyb1cwVFJGV21wYWFXbHhTU1cyVHNCdjBYZXROaE9Lb0JBQUE9In0= -->
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":["sample_spice"],"name":[1],"type":["int"],"align":["right"]}],"data":[{"1":"216"}],"options":{"columns":{"min":{},"max":[10],"total":[1]},"rows":{"min":[10],"max":[10],"total":[1]},"pages":{}}}
-  </script>
-</div>
-<!-- rnb-frame-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBzYW1wbGUgc3BheGNlIHdoZW4geW91IHJvbGwgYSBkaWNlIHRocmVlIHRpbWVzXG5zYW1wbGVfc3BhY2VfZGljZV90aHJlZSA8LSByb2xsZGllKDMpXG5cbnNhbXBsZV9zcGFjZV9kaWNlX3RocmVlICU+JSBcbiAgc3VtbWFyaXNlKHNhbXBsZV9zcGljZSA9IG4oKSlcbmBgYCJ9 -->
+<pre class="r"><code># sample spaxce when you roll a dice three times
+sample_space_dice_three &lt;- rolldie(3)
+
+sample_space_dice_three %&gt;% 
+  summarise(sample_spice = n())</code></pre>
+<!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <p>There are 216 possible outcomes if a dice is rolled three times.</p>
 <p><em>Question 3. In an experiment where we roll four dice:</em> 1. how many outcomes are in the event total_equals_5_6_7 (i.e. the total of the four dice equals 5, 6 or 7)?</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc2FtcGxlX3NwYWNlX2RpY2VfZm91ciA8LSByb2xsZGllKDQpXG5cbnRvdGFsX2VxdWFsc181XzZfNyA8LSBzYW1wbGVfc3BhY2VfZGljZV9mb3VyJT4lIFxubXV0YXRlKGNvbHVtc19zdW0gPSBYMSArIFgyICsgWDMgKyBYNCkgJT4lIFxuZmlsdGVyKGNvbHVtc19zdW0gPT0gNSB8IGNvbHVtc19zdW0gPT0gNiB8IGNvbHVtc19zdW0gPT0gNylcblxubnJvdyh0b3RhbF9lcXVhbHNfNV82XzcpXG5cbmBgYCJ9 -->
-<pre class="r"><code>sample_space_dice_four &lt;- rolldie(4)
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBzYW1wbGUgc3BhY2Ugd2hlbiB5b3Ugcm9sbCBhIGRpY2UgZm91ciB0aW1lc1xuc2FtcGxlX3NwYWNlX2RpY2VfZm91ciA8LSByb2xsZGllKDQpXG5cbnRvdGFsX2VxdWFsc181XzZfNyA8LSBzYW1wbGVfc3BhY2VfZGljZV9mb3VyJT4lIFxubXV0YXRlKGNvbHVtc19zdW0gPSBYMSArIFgyICsgWDMgKyBYNCkgJT4lIFxuZmlsdGVyKGNvbHVtc19zdW0gPT0gNSB8IGNvbHVtc19zdW0gPT0gNiB8IGNvbHVtc19zdW0gPT0gNylcblxubnJvdyh0b3RhbF9lcXVhbHNfNV82XzcpXG5gYGAifQ== -->
+<pre class="r"><code># sample space when you roll a dice four times
+sample_space_dice_four &lt;- rolldie(4)
 
 total_equals_5_6_7 &lt;- sample_space_dice_four%&gt;% 
 mutate(colums_sum = X1 + X2 + X3 + X4) %&gt;% 
 filter(colums_sum == 5 | colums_sum == 6 | colums_sum == 7)
 
-nrow(total_equals_5_6_7)
-</code></pre>
+nrow(total_equals_5_6_7)</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-output-begin eyJkYXRhIjoiWzFdIDM0XG4ifQ== -->
 <pre><code>[1] 34</code></pre>
@@ -1846,9 +1843,6 @@ possible_seats  &lt;- as_tibble(permutations(n = 5,
 # probability that the 5 people sit in order of decreasing height (only possible once):
 1/nrow(possible_seats)</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDAuMDA4MzMzMzMzXG4ifQ== -->
-<pre><code>[1] 0.008333333</code></pre>
-<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <p>The probability that the five people sit in order of decreasing height is 0.008 (3 d.p).</p>
@@ -1877,22 +1871,46 @@ nrow(sample_space_dice_six)</code></pre>
 <p><em>Question 6.If I draw a single card from a 52-card deck, and it is black, what is the probability that its suit is spades?</em></p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuY2FyZHNfYmxhY2tfc3BhZGVcblxuYGBgIn0= -->
-<pre class="r"><code>cards_black_spade
-</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuY2FyZHNfYWxsIDwtIGNhcmRzKCkgIFxubnJvdyhjYXJkc19hbGwpXG5cblxuY2FyZHNfc3BhZGUgPC0gY2FyZHNfYWxsICU+JSBcbiAgZmlsdGVyKHN1aXQgPT0gXCJTcGFkZVwiKVxucHJvYmFBID0gbnJvdyhjYXJkc19zcGFkZSkvbnJvdyhjYXJkc19hbGwpICMgc3BhZGUgY2FyZHMgb3V0IG9mIDUyIFxuXG5wcm9iYUIgPSAxLzIgIyBibGFjayBjYXJkcyBvdXQgb2YgNTJcblxuY2FyZHNfYmxhY2tfc3BhZGUgPC0gcHJvYmFBLyBwcm9iYUIgXG5jYXJkc19ibGFja19zcGFkZVxuYGBgIn0= -->
+<pre class="r"><code>cards_all &lt;- cards()  
+nrow(cards_all)
+
+
+cards_spade &lt;- cards_all %&gt;% 
+  filter(suit == &quot;Spade&quot;)
+probaA = nrow(cards_spade)/nrow(cards_all) # spade cards out of 52 
+
+probaB = 1/2 # black cards out of 52
+
+cards_black_spade &lt;- probaA/ probaB 
+cards_black_spade</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDAuNVxuIn0= -->
-<pre><code>[1] 0.5</code></pre>
-<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <p>The probability that the card is spade, from a black pack, is 0.5</p>
 <p><em>Question 7.Eight patients: Alice, Bob, Carmen, Dinesh, Ella, Fergus, Gianna and Henry are waiting to see a doctor, but only five appointment slots are left today</em> 1. In how many different orders can the doctor see patients today?</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubnJvdyhwb3NzaWJsZV9hcHBvaW50bWVudClcblxuYGBgIn0= -->
-<pre class="r"><code>nrow(possible_appointment)
-</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBjcmVhdGUgdmVjdG9yIG9mIGVpZ2h0IHBhdGllbnRzIGZpdmUgcGVwbGUsIG4gPSA4XG5wYXRpZW50cyA8LSBjKFwiQWxpY2VcIiwgXCJCb2JcIiwgXCJDYXJtZW5cIiwgXCJEaW5lc2hcIiwgXCJFbGxhXCIsIFwiRmVyZ3VzXCIsIFwiR2lhbm5hXCIsIFwiSGVucnlcIilcblxuIyBDaG9vc2UgYSBjb21iaW5hdGlvbiBvZiA1LCByID0gNVxucG9zc2libGVfYXBwb2ludG1lbnQgIDwtIGFzX3RpYmJsZShwZXJtdXRhdGlvbnMobiA9IDgsIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHIgPSA1LCBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB2ID0gcGF0aWVudHMsIHJlcGVhdHMuYWxsb3dlZCA9IEZBTFNFKSlcblxuIyByZW5hbWUgdGhlIHZhcmlhYmxlcyBpbiB0aGUgJ3Bvc3NpYmxlX2FwcG9pbnRtZW50JyB0aWJsZSAobm90IG5lY2Vzc2FyeSBmb3IgdGhlIHN0dWR5KVxucG9zc2libGVfYXBwb2ludG1lbnQgPC0gcG9zc2libGVfYXBwb2ludG1lbnQgJT4lXG4gIHJlbmFtZShcbiAgICBTbG90XzEgPSBWMSxcbiAgICBTbG90XzIgPSBWMixcbiAgICBTbG90XzMgPSBWMyxcbiAgICBTbG90XzQgPVY0LFxuICAgIFNsb3RfNSA9IFY1XG4gIClcblxubnJvdyhwb3NzaWJsZV9hcHBvaW50bWVudClcbmBgYCJ9 -->
+<pre class="r"><code># create vector of eight patients five peple, n = 8
+patients &lt;- c(&quot;Alice&quot;, &quot;Bob&quot;, &quot;Carmen&quot;, &quot;Dinesh&quot;, &quot;Ella&quot;, &quot;Fergus&quot;, &quot;Gianna&quot;, &quot;Henry&quot;)
+
+# Choose a combination of 5, r = 5
+possible_appointment  &lt;- as_tibble(permutations(n = 8, 
+                                  r = 5, 
+                                  v = patients, repeats.allowed = FALSE))
+
+# rename the variables in the 'possible_appointment' tible (not necessary for the study)
+possible_appointment &lt;- possible_appointment %&gt;%
+  rename(
+    Slot_1 = V1,
+    Slot_2 = V2,
+    Slot_3 = V3,
+    Slot_4 =V4,
+    Slot_5 = V5
+  )
+
+nrow(possible_appointment)</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-output-begin eyJkYXRhIjoiWzFdIDY3MjBcbiJ9 -->
 <pre><code>[1] 6720</code></pre>
@@ -1905,9 +1923,11 @@ nrow(sample_space_dice_six)</code></pre>
 </ol>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc3VtKEdpYW5uYV9hbmRfRGluZXNoKS9ucm93KHBvc3NpYmxlX2FwcG9pbnRtZW50KVxuXG5gYGAifQ== -->
-<pre class="r"><code>sum(Gianna_and_Dinesh)/nrow(possible_appointment)
-</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuR2lhbm5hX2FuZF9EaW5lc2ggPC0gcG9zc2libGVfYXBwb2ludG1lbnQgJT4lIFxuICBpc2luKGMoXCJHaWFubmFcIixcIkRpbmVzaFwiKSlcblxuc3VtKEdpYW5uYV9hbmRfRGluZXNoKS9ucm93KHBvc3NpYmxlX2FwcG9pbnRtZW50KVxuYGBgIn0= -->
+<pre class="r"><code>Gianna_and_Dinesh &lt;- possible_appointment %&gt;% 
+  isin(c(&quot;Gianna&quot;,&quot;Dinesh&quot;))
+
+sum(Gianna_and_Dinesh)/nrow(possible_appointment)</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-output-begin eyJkYXRhIjoiWzFdIDAuMzU3MTQyOVxuIn0= -->
 <pre><code>[1] 0.3571429</code></pre>
@@ -1920,24 +1940,57 @@ nrow(sample_space_dice_six)</code></pre>
 </ol>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYW5zMlxuXG5gYGAifQ== -->
-<pre class="r"><code>ans2
-</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuR2lhbm5hX2FuZF9EaW5lc2hfMiA8LSBwb3NzaWJsZV9hcHBvaW50bWVudCAlPiUgXG4gIGlzaW4oYyhcIkdpYW5uYVwiLFwiRGluZXNoXCIpLCBvcmRlcmVkID0gVFJVRSlcblxuYW5zMSA8LSBzdW0oR2lhbm5hX2FuZF9EaW5lc2hfMikvc3VtKEdpYW5uYV9hbmRfRGluZXNoKSAjIHByb3ZpZGVkIHRoZXkgd2lsbCBib3RoIHNlZW4gYnkgdGhlIGRvY3RvclxuYW5zMiA8LSBzdW0oR2lhbm5hX2FuZF9EaW5lc2hfMikvbnJvdyhwb3NzaWJsZV9hcHBvaW50bWVudCkgIyBwcm92aWRlZCB0aGV5IHdpbGwgbm90IHNlZW4gYnkgdGhlIGRvY3RvclxuYGBgIn0= -->
+<pre class="r"><code>Gianna_and_Dinesh_2 &lt;- possible_appointment %&gt;% 
+  isin(c(&quot;Gianna&quot;,&quot;Dinesh&quot;), ordered = TRUE)
+
+ans1 &lt;- sum(Gianna_and_Dinesh_2)/sum(Gianna_and_Dinesh) # provided they will both seen by the doctor
+ans2 &lt;- sum(Gianna_and_Dinesh_2)/nrow(possible_appointment) # provided they will not seen by the doctor</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDAuMTc4NTcxNFxuIn0= -->
-<pre><code>[1] 0.1785714</code></pre>
-<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <p>The probability of Giana being seen before Dinesh is 0.5, provided that they will both seen by the doctor. Alternative, Gianna has a probability of 0.18 seen by the doctor before Dinesh in case all 8 patients are in the waiting list.</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyB0aGlzIHNob3VsZCBiZSBoYWxmIHRoZSBwcm9iYWJpbGl0eSBvZiBxdWVzdGlvbiBpaSwgYmVjYXVzZSwgaW4gZmlsdGVyZWQgb3V0Y29tZXMgZm9yIFxuIyBxdWVzdGlvbiBpaS4sIEdpYW5uYSB3b3VsZCBiZSBiZWZvcmUgRGluZXNoIGhhbGYgdGhlIHRpbWUuXG5cbiMgaXYuXG4jIGZpcnN0IHN0ZXAgaXMgYSAyUDIgcHJvYmxlbTogcGVybXV0ZSAyIHBhdGllbnRzIGZyb20gMi5cbmhpZ2hfcHJpb3JpdHlfcGF0aWVudHMgPC0gYyhcIkNhcm1lblwiLCBcIkhlbnJ5XCIpXG5TX2hpZ2hfcHJpb3JpdHkgPC0gYXNfdGliYmxlKHBlcm11dGF0aW9ucyhuID0gMiwgciA9IDIsIHYgPSBoaWdoX3ByaW9yaXR5X3BhdGllbnRzLCByZXBlYXRzLmFsbG93ZWQgPSBGQUxTRSkpXG5uYW1lcyhTX2hpZ2hfcHJpb3JpdHkpIDwtIGMoXCJhcHB0MVwiLCBcImFwcHQyXCIpXG5cbiMgc2Vjb25kIHN0ZXAgaXMgYSA2UDMgcHJvYmxlbTogcGVybXV0ZSAzIHBhdGllbnRzIGZyb20gNi5cbm5vcm1hbF9wcmlvcml0eV9wYXRpZW50cyA8LSBjKFwiQWxpY2VcIiwgXCJCb2JcIiwgXCJEaW5lc2hcIiwgXCJFbGxhXCIsIFwiRmVyZ3VzXCIsIFwiR2lhbm5hXCIpXG5TX25vcm1hbF9wcmlvcml0eSA8LSBhc190aWJibGUocGVybXV0YXRpb25zKG4gPSA2LCByID0gMywgdiA9IG5vcm1hbF9wcmlvcml0eV9wYXRpZW50cywgcmVwZWF0cy5hbGxvd2VkID0gRkFMU0UpKVxubmFtZXMoU19ub3JtYWxfcHJpb3JpdHkpIDwtYyhcImFwcHQzXCIsIFwiYXBwdDRcIiwgXCJhcHB0NVwiKVxuXG4jIG1lcmdlIHRoZXNlIGRhdGFmcmFtZXNcblMgPC0gbWVyZ2UoU19oaWdoX3ByaW9yaXR5LCBTX25vcm1hbF9wcmlvcml0eSlcbiMgZmluYWwgYW5zd2VyXG5ucm93KFMpXG5gYGAifQ== -->
+<pre class="r"><code># this should be half the probability of question ii, because, in filtered outcomes for 
+# question ii., Gianna would be before Dinesh half the time.
+
+# iv.
+# first step is a 2P2 problem: permute 2 patients from 2.
+high_priority_patients &lt;- c(&quot;Carmen&quot;, &quot;Henry&quot;)
+S_high_priority &lt;- as_tibble(permutations(n = 2, r = 2, v = high_priority_patients, repeats.allowed = FALSE))
+names(S_high_priority) &lt;- c(&quot;appt1&quot;, &quot;appt2&quot;)
+
+# second step is a 6P3 problem: permute 3 patients from 6.
+normal_priority_patients &lt;- c(&quot;Alice&quot;, &quot;Bob&quot;, &quot;Dinesh&quot;, &quot;Ella&quot;, &quot;Fergus&quot;, &quot;Gianna&quot;)
+S_normal_priority &lt;- as_tibble(permutations(n = 6, r = 3, v = normal_priority_patients, repeats.allowed = FALSE))
+names(S_normal_priority) &lt;-c(&quot;appt3&quot;, &quot;appt4&quot;, &quot;appt5&quot;)
+
+# merge these dataframes
+S &lt;- merge(S_high_priority, S_normal_priority)
+# final answer
+nrow(S)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDI0MFxuIn0= -->
+<pre><code>[1] 240</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
 <p><em>Question 8.If order is not significant, how many ways are there to select a 5 student quiz team from a group of 8 students?</em></p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubnVtYmVyX29mX3N0dWRlbnRzIDwtIDE6OFxuZml2ZV9zdHVkZW50c19jb21iaSA8LSBjb21iaW5hdGlvbnMobiA9IDgsIHIgPSA1LCB2ID0gbnVtYmVyX29mX3N0dWRlbnRzKVxubnJvdyhmaXZlX3N0dWRlbnRzX2NvbWJpKVxuXG5gYGAifQ== -->
-<pre class="r"><code>number_of_students &lt;- 1:8
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyB1c2UgdGhlIGNvbWJpbmF0aW9uIGZ1bmN0aW9uLCB3aGVyZSB3ZSBoYXZlIDggc3R1ZGVudHMgYW5kIHdlIG5lZWQgYSBjb21iaW5hdGlvbiBvZiA1IHN0dWRlbnRzLiBcblxuIyBudW1iZXIgb2YgdG90YWwgc3R1ZGVudHMgKGFzc2lnbiBieSBhIG51bWJlcilcbm51bWJlcl9vZl9zdHVkZW50cyA8LSAxOjhcblxuIyB1c2UgdGhlIGNvbWJpbmF0aW9ucyBmdW5jdGlvblxuZml2ZV9zdHVkZW50c19jb21iaSA8LSBjb21iaW5hdGlvbnMobiA9IDgsIHIgPSA1LCB2ID0gbnVtYmVyX29mX3N0dWRlbnRzKVxuXG4jIG51bWJlciBvZiBjb21iaW5hdGlvbnNcbm5yb3coZml2ZV9zdHVkZW50c19jb21iaSlcbmBgYCJ9 -->
+<pre class="r"><code># use the combination function, where we have 8 students and we need a combination of 5 students. 
+
+# number of total students (assign by a number)
+number_of_students &lt;- 1:8
+
+# use the combinations function
 five_students_combi &lt;- combinations(n = 8, r = 5, v = number_of_students)
-nrow(five_students_combi)
-</code></pre>
+
+# number of combinations
+nrow(five_students_combi)</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-output-begin eyJkYXRhIjoiWzFdIDU2XG4ifQ== -->
 <pre><code>[1] 56</code></pre>
@@ -1946,10 +1999,10 @@ nrow(five_students_combi)
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZml2ZV9zdHVkZW50c19jb21iaV8yIDwtIGNob29zZSg4LCA1KVxuZml2ZV9zdHVkZW50c19jb21iaV8yXG5cbmBgYCJ9 -->
-<pre class="r"><code>five_students_combi_2 &lt;- choose(8, 5)
-five_students_combi_2
-</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBxdWVzdGlvbiA4IChhbHRlcm5hdGl2ZSB3YXkpIFxuZml2ZV9zdHVkZW50c19jb21iaV8yIDwtIGNob29zZSg4LCA1KVxuZml2ZV9zdHVkZW50c19jb21iaV8yXG5gYGAifQ== -->
+<pre class="r"><code># question 8 (alternative way) 
+five_students_combi_2 &lt;- choose(8, 5)
+five_students_combi_2</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-output-begin eyJkYXRhIjoiWzFdIDU2XG4ifQ== -->
 <pre><code>[1] 56</code></pre>
@@ -1959,55 +2012,31 @@ five_students_combi_2
 <p><em>Question 9.How would your answer for question 8 change if a team captain had to be selected for each team?</em></p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZm91cl9zdHVkZW50c19jb21iaVxuXG5gYGAifQ== -->
-<pre class="r"><code>four_students_combi
-</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyB1c2UgdGhlIGNvbWJpbmF0aW9uIGZ1bmN0aW9uLCB3aGVyZSB3ZSBoYXZlIDcgKG91dCBvZiA4KSBzdHVkZW50cyBhbmQgd2UgbmVlZCBhIGNvbWJpbmF0aW9uIG9mIGFub3RoZXIgNCBzdHVkZW50cyB0byBmaWxsIGEgdGVhbSBvZiA1LiBcblxuIyBudW1iZXIgb2YgdG90YWwgc3R1ZGVudHMgKGFzc2lnbiBieSBhIG51bWJlcilcbm51bWJlcl9vZl9zdHVkZW50c18yIDwtIDE6N1xuXG4jIHVzZSB0aGUgY29tYmluYXRpb25zIGZ1bmN0aW9uXG5mb3VyX3N0dWRlbnRzX2NvbWJpIDwtIGNvbWJpbmF0aW9ucyhuID0gNywgciA9IDQsIHYgPSBudW1iZXJfb2Zfc3R1ZGVudHMpXG5cbm5yb3coZm91cl9zdHVkZW50c19jb21iaSlcbmBgYCJ9 -->
+<pre class="r"><code># use the combination function, where we have 7 (out of 8) students and we need a combination of another 4 students to fill a team of 5. 
+
+# number of total students (assign by a number)
+number_of_students_2 &lt;- 1:7
+
+# use the combinations function
+four_students_combi &lt;- combinations(n = 7, r = 4, v = number_of_students)
+
+nrow(four_students_combi)</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiICAgICAgWywxXSBbLDJdIFssM10gWyw0XVxuIFsxLF0gICAgMSAgICAyICAgIDMgICAgNFxuIFsyLF0gICAgMSAgICAyICAgIDMgICAgNVxuIFszLF0gICAgMSAgICAyICAgIDMgICAgNlxuIFs0LF0gICAgMSAgICAyICAgIDMgICAgN1xuIFs1LF0gICAgMSAgICAyICAgIDQgICAgNVxuIFs2LF0gICAgMSAgICAyICAgIDQgICAgNlxuIFs3LF0gICAgMSAgICAyICAgIDQgICAgN1xuIFs4LF0gICAgMSAgICAyICAgIDUgICAgNlxuIFs5LF0gICAgMSAgICAyICAgIDUgICAgN1xuWzEwLF0gICAgMSAgICAyICAgIDYgICAgN1xuWzExLF0gICAgMSAgICAzICAgIDQgICAgNVxuWzEyLF0gICAgMSAgICAzICAgIDQgICAgNlxuWzEzLF0gICAgMSAgICAzICAgIDQgICAgN1xuWzE0LF0gICAgMSAgICAzICAgIDUgICAgNlxuWzE1LF0gICAgMSAgICAzICAgIDUgICAgN1xuWzE2LF0gICAgMSAgICAzICAgIDYgICAgN1xuWzE3LF0gICAgMSAgICA0ICAgIDUgICAgNlxuWzE4LF0gICAgMSAgICA0ICAgIDUgICAgN1xuWzE5LF0gICAgMSAgICA0ICAgIDYgICAgN1xuWzIwLF0gICAgMSAgICA1ICAgIDYgICAgN1xuWzIxLF0gICAgMiAgICAzICAgIDQgICAgNVxuWzIyLF0gICAgMiAgICAzICAgIDQgICAgNlxuWzIzLF0gICAgMiAgICAzICAgIDQgICAgN1xuWzI0LF0gICAgMiAgICAzICAgIDUgICAgNlxuWzI1LF0gICAgMiAgICAzICAgIDUgICAgN1xuWzI2LF0gICAgMiAgICAzICAgIDYgICAgN1xuWzI3LF0gICAgMiAgICA0ICAgIDUgICAgNlxuWzI4LF0gICAgMiAgICA0ICAgIDUgICAgN1xuWzI5LF0gICAgMiAgICA0ICAgIDYgICAgN1xuWzMwLF0gICAgMiAgICA1ICAgIDYgICAgN1xuWzMxLF0gICAgMyAgICA0ICAgIDUgICAgNlxuWzMyLF0gICAgMyAgICA0ICAgIDUgICAgN1xuWzMzLF0gICAgMyAgICA0ICAgIDYgICAgN1xuWzM0LF0gICAgMyAgICA1ICAgIDYgICAgN1xuWzM1LF0gICAgNCAgICA1ICAgIDYgICAgN1xuIn0= -->
-<pre><code>      [,1] [,2] [,3] [,4]
- [1,]    1    2    3    4
- [2,]    1    2    3    5
- [3,]    1    2    3    6
- [4,]    1    2    3    7
- [5,]    1    2    4    5
- [6,]    1    2    4    6
- [7,]    1    2    4    7
- [8,]    1    2    5    6
- [9,]    1    2    5    7
-[10,]    1    2    6    7
-[11,]    1    3    4    5
-[12,]    1    3    4    6
-[13,]    1    3    4    7
-[14,]    1    3    5    6
-[15,]    1    3    5    7
-[16,]    1    3    6    7
-[17,]    1    4    5    6
-[18,]    1    4    5    7
-[19,]    1    4    6    7
-[20,]    1    5    6    7
-[21,]    2    3    4    5
-[22,]    2    3    4    6
-[23,]    2    3    4    7
-[24,]    2    3    5    6
-[25,]    2    3    5    7
-[26,]    2    3    6    7
-[27,]    2    4    5    6
-[28,]    2    4    5    7
-[29,]    2    4    6    7
-[30,]    2    5    6    7
-[31,]    3    4    5    6
-[32,]    3    4    5    7
-[33,]    3    4    6    7
-[34,]    3    5    6    7
-[35,]    4    5    6    7</code></pre>
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDM1XG4ifQ== -->
+<pre><code>[1] 35</code></pre>
 <!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBudW1iZXIgb2YgY29tYmluYXRpb25zXG4jbnJvdyhmaXZlX3N0dWRlbnRzX2NvbWJpKVxuYGBgIn0= -->
+<pre class="r"><code># number of combinations
+#nrow(five_students_combi)</code></pre>
+<!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <p>This time, there are 35 combinations that can form a team of 5 out of 8 peple, provided one of those 8 students is always in the team.</p>
 <!-- rnb-text-end -->
 </div>
 
-<div id="rmd-source-code">LS0tCnRpdGxlOiAiUiBOb3RlYm9vayIKb3V0cHV0OiBodG1sX25vdGVib29rCi0tLQoKIyMjIFByb2JhYmlsaXR5IFF1aXoKCkxvYWQgdGhlIHJlcXVpcmVkIHBhY2thZ2VzIGZvciB0aGlzIGhvbWV3b3JrOgpgYGB7cn0KbGlicmFyeShwcm9iKQpsaWJyYXJ5KGd0b29scykKbGlicmFyeSh0aWR5dmVyc2UpCmBgYAoKKlF1ZXN0aW9uIDEuIElmIEkgcm9sbCBhIHNpeC1zaWRlZCBkaWNlIG9uY2UsIHdoYXQgaXMgdGhlIHByb2JhYmlsaXR5IG9mIGdldHRpbmcgYSBudW1iZXIgbGVzcyB0aGFuIDU/KgpgYGB7cn0KIyBzYW1wbGUgc3BheGNlIHdoZW4geW91IHJvbGwgYSBkaWNlIG9uY2UKc2FtcGxlX3NwYWNlX2RpY2Vfb25jZSA8LSByb2xsZGllKDEpCgojIG51bWJlciBvZiBwb3NzaWJsZSBvdXRjb21lcyBpZiB5b3Ugd2FudCBhIG51bWJlciBsZXNzIHRoYW4gNSAgCmRpY2VfbGVzc190aGFuX2ZpdmUgPC0gc2FtcGxlX3NwYWNlX2RpY2Vfb25jZSAlPiUgCiAgZmlsdGVyKFgxIDwgNSkKCiMgcHJvYmFiaWxpdHkgb2YgdGhlIG91dGNvbWUKbnJvdyhkaWNlX2xlc3NfdGhhbl9maXZlKSAvIG5yb3coc2FtcGxlX3NwYWNlX2RpY2Vfb25jZSkKYGBgCgpUaGUgcHJvYmFiaWxpdHkgb2YgZ2V0dGluZyBhIG51bWJlciBsZXNzIHRoYW4gNSB3aGVuIGEgZGljZSBpcyByb2xsZWQgb25jZSBpcyAyLzMgPSAwLjY2Ni4KCipRdWVzdGlvbiAyLiBIb3cgbWFueSBvdXRjb21lcyBhcmUgdGhlcmUgaW4gdGhlIHNhbXBsZSBzcGFjZSBvZiBhbiBleHBlcmltZW50IGluIHdoaWNoIHdlIHRvc3MgdGhyZWUgZGljZT8qCmBgYHtyfQojIHNhbXBsZSBzcGF4Y2Ugd2hlbiB5b3Ugcm9sbCBhIGRpY2UgdGhyZWUgdGltZXMKc2FtcGxlX3NwYWNlX2RpY2VfdGhyZWUgPC0gcm9sbGRpZSgzKQoKc2FtcGxlX3NwYWNlX2RpY2VfdGhyZWUgJT4lIAogIHN1bW1hcmlzZShzYW1wbGVfc3BpY2UgPSBuKCkpCmBgYAoKVGhlcmUgYXJlIDIxNiBwb3NzaWJsZSBvdXRjb21lcyBpZiBhIGRpY2UgaXMgcm9sbGVkIHRocmVlIHRpbWVzLgoKKlF1ZXN0aW9uIDMuIEluIGFuIGV4cGVyaW1lbnQgd2hlcmUgd2Ugcm9sbCBmb3VyIGRpY2U6KgoxLiBob3cgbWFueSBvdXRjb21lcyBhcmUgaW4gdGhlIGV2ZW50IHRvdGFsX2VxdWFsc181XzZfNyAoaS5lLiB0aGUgdG90YWwgb2YgdGhlIGZvdXIgZGljZSBlcXVhbHMgNSwgNiBvciA3KT8KYGBge3J9CiMgc2FtcGxlIHNwYWNlIHdoZW4geW91IHJvbGwgYSBkaWNlIGZvdXIgdGltZXMKc2FtcGxlX3NwYWNlX2RpY2VfZm91ciA8LSByb2xsZGllKDQpCgp0b3RhbF9lcXVhbHNfNV82XzcgPC0gc2FtcGxlX3NwYWNlX2RpY2VfZm91ciU+JSAKbXV0YXRlKGNvbHVtc19zdW0gPSBYMSArIFgyICsgWDMgKyBYNCkgJT4lIApmaWx0ZXIoY29sdW1zX3N1bSA9PSA1IHwgY29sdW1zX3N1bSA9PSA2IHwgY29sdW1zX3N1bSA9PSA3KQoKbnJvdyh0b3RhbF9lcXVhbHNfNV82XzcpCmBgYAoKVGhlcmUgYXJlIDM0IG91dGNvbWVzIHdoZXJlIHRoZSBzdW1tYXRpb24gb2YgZm91ciBkaWNlcyB3aWxsIGdpdmUgZWl0aGVyIDUsIDYgb3IgNy4KCjIuIHdoYXQgaXMgdGhlIHByb2JhYmlsaXR5IG9mIHRoaXMgZXZlbnQ/CmBgYHtyfQpucm93KHRvdGFsX2VxdWFsc181XzZfNykgL25yb3coc2FtcGxlX3NwYWNlX2RpY2VfZm91cikKYGBgCgpUaGUgcHJvYmFiaWxpdHkgd2hlcmUgdGhlIHN1bW1hdGlvbiBvZiBmb3VyIGRpY2VzIHdpbGwgZ2l2ZSBlaXRoZXIgNSwgNiBvciA3IGlzIDAuMDMgKDMgZC5wLikKCjMuIHdoYXQgYXNzdW1wdGlvbnMgZG8gd2UgYXBwbHkgaW4gYW5zd2VyaW5nIHBhcnQgaWlpPwpJbiAqUXVlc3Rpb24gMyosIGl0IHdhcyBhc3N1bWVkIHRoYXQgYSBkaWZmZXJlbnQgZXZlbnQgaXMgb2NjdXJlZCB3aGVuIGEgZGljZSBpcyByb2xsZWQsICBlLmcuIHRoZSBzYW1lIG51bWJlciBpcyBhcHBlcmVhZCB3aGVuIGEgc2luZ2xlIGRpY2UgaXMgcm9sbGVkLgoKKlF1ZXN0aW9uIDQuIEZpdmUgY2hhaXJzIGFyZSBwbGFjZWQgaW4gYSByb3cgaW4gYSByb29tLCBhbG9uZyB3aXRoIGZpdmUgcGVvcGxlIG9mIGRpZmZlcmluZyBoZWlnaHQuIFRoZSBwZW9wbGUgc2l0IGRvd24gcmFuZG9tbHkgb24gdGhlIGNoYWlycy4gV2hhdCBpcyB0aGUgcHJvYmFiaWxpdHkgdGhhdCB0aGV5IHNpdCBpbiBvcmRlciBvZiBkZWNyZWFzaW5nIGhlaWdodCwgbGVmdCB0byByaWdodD86KgoKYGBge3J9CiMgY3JlYXRlIHZlY3RvciBvZiBjaG9pY2VzIGNvbnRhaW5zIGZpdmUgcGVwbGUsIG4gPSAxMC4gCmZpdmVfcGVvcGxlIDwtIGMoIkV4dHJlbWUgVGFsbCIsICJWZXJ5IFRhbGwiLCAiVGFsbCIsICJNZWRpdW0gSGVpZ2h0IiwgIlNob3J0IikKCiMgQ2hvb3NlIGEgY29tYmluYXRpb24gb2YgNSwgciA9IDUKcG9zc2libGVfc2VhdHMgIDwtIGFzX3RpYmJsZShwZXJtdXRhdGlvbnMobiA9IDUsIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgciA9IDUsIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgdiA9IGZpdmVfcGVvcGxlLCByZXBlYXRzLmFsbG93ZWQgPSBGQUxTRSkpCgojIHByb2JhYmlsaXR5IHRoYXQgdGhlIDUgcGVvcGxlIHNpdCBpbiBvcmRlciBvZiBkZWNyZWFzaW5nIGhlaWdodCAob25seSBwb3NzaWJsZSBvbmNlKToKMS9ucm93KHBvc3NpYmxlX3NlYXRzKQpgYGAKClRoZSBwcm9iYWJpbGl0eSB0aGF0IHRoZSBmaXZlIHBlb3BsZSBzaXQgaW4gb3JkZXIgb2YgZGVjcmVhc2luZyBoZWlnaHQgaXMgMC4wMDggKDMgZC5wKS4KCipRdWVzdGlvbiA1LiBJIHJvbGwgc2l4IGRpY2U6KgoxLiB3aGF0IGlzIHRoZSBwcm9iYWJpbGl0eSBJIHNlZSB0aGUgbnVtYmVycyA2LCA1LCA0LCAzLCAyIGFuZCAxIGluIG9yZGVyIG9uIHRoZSBkaWNlLCBsZWZ0IHRvIHJpZ2h0PwpgYGB7cn0KIyBzYW1wbGUgc3BhY2Ugd2hlbiB5b3Ugcm9sbCBhIGRpY2Ugc2l4IHRpbWVzCnNhbXBsZV9zcGFjZV9kaWNlX3NpeCA8LSByb2xsZGllKDYpCm5yb3coc2FtcGxlX3NwYWNlX2RpY2Vfc2l4KQoKMS9ucm93KHNhbXBsZV9zcGFjZV9kaWNlX3NpeCkKYGBgCjIuIHdoYXQgaXMgdGhlIHByb2JhYmlsaXR5IEkgc2VlIG9uZSBlYWNoIG9mIHRoZSBudW1iZXJzIDYsIDUsIDQsIDMsIDIgYW5kIDEgb24gdGhlIGRpY2UgcmVnYXJkbGVzcyBvZiBvcmRlcj8KCgoqUXVlc3Rpb24gNi5JZiBJIGRyYXcgYSBzaW5nbGUgY2FyZCBmcm9tIGEgNTItY2FyZCBkZWNrLCBhbmQgaXQgaXMgYmxhY2ssIHdoYXQgaXMgdGhlIHByb2JhYmlsaXR5IHRoYXQgaXRzIHN1aXQgaXMgc3BhZGVzPyoKYGBge3J9CmNhcmRzX2FsbCA8LSBjYXJkcygpICAKbnJvdyhjYXJkc19hbGwpCgoKY2FyZHNfc3BhZGUgPC0gY2FyZHNfYWxsICU+JSAKICBmaWx0ZXIoc3VpdCA9PSAiU3BhZGUiKQpwcm9iYUEgPSBucm93KGNhcmRzX3NwYWRlKS9ucm93KGNhcmRzX2FsbCkgIyBzcGFkZSBjYXJkcyBvdXQgb2YgNTIgCgpwcm9iYUIgPSAxLzIgIyBibGFjayBjYXJkcyBvdXQgb2YgNTIKCmNhcmRzX2JsYWNrX3NwYWRlIDwtIHByb2JhQS8gcHJvYmFCIApjYXJkc19ibGFja19zcGFkZQpgYGAKClRoZSBwcm9iYWJpbGl0eSB0aGF0IHRoZSBjYXJkIGlzIHNwYWRlLCBmcm9tIGEgYmxhY2sgcGFjaywgaXMgMC41IAoKKlF1ZXN0aW9uIDcuRWlnaHQgcGF0aWVudHM6IEFsaWNlLCBCb2IsIENhcm1lbiwgRGluZXNoLCBFbGxhLCBGZXJndXMsIEdpYW5uYSBhbmQgSGVucnkgYXJlIHdhaXRpbmcgdG8gc2VlIGEgZG9jdG9yLCBidXQgb25seSBmaXZlIGFwcG9pbnRtZW50IHNsb3RzIGFyZSBsZWZ0IHRvZGF5KgoxLiBJbiBob3cgbWFueSBkaWZmZXJlbnQgb3JkZXJzIGNhbiB0aGUgZG9jdG9yIHNlZSBwYXRpZW50cyB0b2RheT8KYGBge3J9CiMgY3JlYXRlIHZlY3RvciBvZiBlaWdodCBwYXRpZW50cyBmaXZlIHBlcGxlLCBuID0gOApwYXRpZW50cyA8LSBjKCJBbGljZSIsICJCb2IiLCAiQ2FybWVuIiwgIkRpbmVzaCIsICJFbGxhIiwgIkZlcmd1cyIsICJHaWFubmEiLCAiSGVucnkiKQoKIyBDaG9vc2UgYSBjb21iaW5hdGlvbiBvZiA1LCByID0gNQpwb3NzaWJsZV9hcHBvaW50bWVudCAgPC0gYXNfdGliYmxlKHBlcm11dGF0aW9ucyhuID0gOCwgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICByID0gNSwgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB2ID0gcGF0aWVudHMsIHJlcGVhdHMuYWxsb3dlZCA9IEZBTFNFKSkKCiMgcmVuYW1lIHRoZSB2YXJpYWJsZXMgaW4gdGhlICdwb3NzaWJsZV9hcHBvaW50bWVudCcgdGlibGUgKG5vdCBuZWNlc3NhcnkgZm9yIHRoZSBzdHVkeSkKcG9zc2libGVfYXBwb2ludG1lbnQgPC0gcG9zc2libGVfYXBwb2ludG1lbnQgJT4lCiAgcmVuYW1lKAogICAgU2xvdF8xID0gVjEsCiAgICBTbG90XzIgPSBWMiwKICAgIFNsb3RfMyA9IFYzLAogICAgU2xvdF80ID1WNCwKICAgIFNsb3RfNSA9IFY1CiAgKQoKbnJvdyhwb3NzaWJsZV9hcHBvaW50bWVudCkKCmBgYAoKVGhlcmUgYXJlIDY3MjAgZGlmZmVyZW50IHNsb3RzIHRoYXQgdGhlIDggcGF0aWVudHMgY2FuIGZpbGwgdGhlIDggc2xvdHMuIAoKCjIuIFdoYXQgaXMgdGhlIHByb2JhYmlsaXR5IG9mIEdpYW5uYSBhbmQgRGFuZXNoIGJvdGggYmVpbmcgc2VlbiB0b2RheT8KYGBge3J9CkdpYW5uYV9hbmRfRGluZXNoIDwtIHBvc3NpYmxlX2FwcG9pbnRtZW50ICU+JSAKICBpc2luKGMoIkdpYW5uYSIsIkRpbmVzaCIpKQoKc3VtKEdpYW5uYV9hbmRfRGluZXNoKS9ucm93KHBvc3NpYmxlX2FwcG9pbnRtZW50KQpgYGAKClRoZXJlIGlzIGEgcHJvYmFiaWxpdHkgb2YgMC4zNiAoMiBkLnApIHRoYXQgR2lhbm5hIGFuZCBEYW5lc2ggd2lsbCBiZSBzZWVuIHRvZGF5LgoKMy4gV2hhdCBpcyB0aGUgcHJvYmFiaWxpdHkgb2YgR2lhbm5hIGJlaW5nIHNlZW4gYmVmb3JlIERpbmVzaCB0b2RheT8KYGBge3J9CkdpYW5uYV9hbmRfRGluZXNoXzIgPC0gcG9zc2libGVfYXBwb2ludG1lbnQgJT4lIAogIGlzaW4oYygiR2lhbm5hIiwiRGluZXNoIiksIG9yZGVyZWQgPSBUUlVFKQoKYW5zMSA8LSBzdW0oR2lhbm5hX2FuZF9EaW5lc2hfMikvc3VtKEdpYW5uYV9hbmRfRGluZXNoKSAjIHByb3ZpZGVkIHRoZXkgd2lsbCBib3RoIHNlZW4gYnkgdGhlIGRvY3RvcgphbnMyIDwtIHN1bShHaWFubmFfYW5kX0RpbmVzaF8yKS9ucm93KHBvc3NpYmxlX2FwcG9pbnRtZW50KSAjIHByb3ZpZGVkIHRoZXkgd2lsbCBub3Qgc2VlbiBieSB0aGUgZG9jdG9yCmBgYAoKVGhlIHByb2JhYmlsaXR5IG9mIEdpYW5hIGJlaW5nIHNlZW4gYmVmb3JlIERpbmVzaCBpcyAwLjUsIHByb3ZpZGVkIHRoYXQgdGhleSB3aWxsIGJvdGggc2VlbiBieSB0aGUgZG9jdG9yLiBBbHRlcm5hdGl2ZSwgR2lhbm5hIGhhcyBhIHByb2JhYmlsaXR5IG9mIDAuMTggc2VlbiBieSB0aGUgZG9jdG9yIGJlZm9yZSBEaW5lc2ggaW4gY2FzZSBhbGwgOCBwYXRpZW50cyBhcmUgaW4gdGhlIHdhaXRpbmcgbGlzdC4gCgoqUXVlc3Rpb24gOC5JZiBvcmRlciBpcyBub3Qgc2lnbmlmaWNhbnQsIGhvdyBtYW55IHdheXMgYXJlIHRoZXJlIHRvIHNlbGVjdCBhIDUgc3R1ZGVudCBxdWl6IHRlYW0gZnJvbSBhIGdyb3VwIG9mIDggc3R1ZGVudHM/KgpgYGB7cn0KIyB1c2UgdGhlIGNvbWJpbmF0aW9uIGZ1bmN0aW9uLCB3aGVyZSB3ZSBoYXZlIDggc3R1ZGVudHMgYW5kIHdlIG5lZWQgYSBjb21iaW5hdGlvbiBvZiA1IHN0dWRlbnRzLiAKCiMgbnVtYmVyIG9mIHRvdGFsIHN0dWRlbnRzIChhc3NpZ24gYnkgYSBudW1iZXIpCm51bWJlcl9vZl9zdHVkZW50cyA8LSAxOjgKCiMgdXNlIHRoZSBjb21iaW5hdGlvbnMgZnVuY3Rpb24KZml2ZV9zdHVkZW50c19jb21iaSA8LSBjb21iaW5hdGlvbnMobiA9IDgsIHIgPSA1LCB2ID0gbnVtYmVyX29mX3N0dWRlbnRzKQoKIyBudW1iZXIgb2YgY29tYmluYXRpb25zCm5yb3coZml2ZV9zdHVkZW50c19jb21iaSkKYGBgCgpgYGB7cn0KIyBxdWVzdGlvbiA4IChhbHRlcm5hdGl2ZSB3YXkpIApmaXZlX3N0dWRlbnRzX2NvbWJpXzIgPC0gY2hvb3NlKDgsIDUpCmZpdmVfc3R1ZGVudHNfY29tYmlfMgpgYGAKCipRdWVzdGlvbiA5LkhvdyB3b3VsZCB5b3VyIGFuc3dlciBmb3IgcXVlc3Rpb24gOCBjaGFuZ2UgaWYgYSB0ZWFtIGNhcHRhaW4gaGFkIHRvIGJlIHNlbGVjdGVkIGZvciBlYWNoIHRlYW0/KgpgYGB7cn0KIyB1c2UgdGhlIGNvbWJpbmF0aW9uIGZ1bmN0aW9uLCB3aGVyZSB3ZSBoYXZlIDcgKG91dCBvZiA4KSBzdHVkZW50cyBhbmQgd2UgbmVlZCBhIGNvbWJpbmF0aW9uIG9mIGFub3RoZXIgNCBzdHVkZW50cyB0byBmaWxsIGEgdGVhbSBvZiA1LiAKCiMgbnVtYmVyIG9mIHRvdGFsIHN0dWRlbnRzIChhc3NpZ24gYnkgYSBudW1iZXIpCm51bWJlcl9vZl9zdHVkZW50c18yIDwtIDE6NwoKIyB1c2UgdGhlIGNvbWJpbmF0aW9ucyBmdW5jdGlvbgpmb3VyX3N0dWRlbnRzX2NvbWJpIDwtIGNvbWJpbmF0aW9ucyhuID0gNywgciA9IDQsIHYgPSBudW1iZXJfb2Zfc3R1ZGVudHMpCgojIG51bWJlciBvZiBjb21iaW5hdGlvbnMKI25yb3coZml2ZV9zdHVkZW50c19jb21iaSkKYGBgCgpUaGlzIHRpbWUsIHRoZXJlIGFyZSAzNSBjb21iaW5hdGlvbnMgdGhhdCBjYW4gZm9ybSBhIHRlYW0gb2YgNSBvdXQgb2YgOCBwZXBsZSwgcHJvdmlkZWQgb25lIG9mIHRob3NlIDggc3R1ZGVudHMgaXMgYWx3YXlzIGluIHRoZSB0ZWFtLgo=</div>
+<div id="rmd-source-code">LS0tCnRpdGxlOiAiUiBOb3RlYm9vayIKb3V0cHV0OiBodG1sX25vdGVib29rCi0tLQoKIyMjIFByb2JhYmlsaXR5IFF1aXoKCkxvYWQgdGhlIHJlcXVpcmVkIHBhY2thZ2VzIGZvciB0aGlzIGhvbWV3b3JrOgpgYGB7cn0KbGlicmFyeShwcm9iKQpsaWJyYXJ5KGd0b29scykKbGlicmFyeSh0aWR5dmVyc2UpCmBgYAoKKlF1ZXN0aW9uIDEuIElmIEkgcm9sbCBhIHNpeC1zaWRlZCBkaWNlIG9uY2UsIHdoYXQgaXMgdGhlIHByb2JhYmlsaXR5IG9mIGdldHRpbmcgYSBudW1iZXIgbGVzcyB0aGFuIDU/KgpgYGB7cn0KIyBzYW1wbGUgc3BheGNlIHdoZW4geW91IHJvbGwgYSBkaWNlIG9uY2UKc2FtcGxlX3NwYWNlX2RpY2Vfb25jZSA8LSByb2xsZGllKDEpCgojIG51bWJlciBvZiBwb3NzaWJsZSBvdXRjb21lcyBpZiB5b3Ugd2FudCBhIG51bWJlciBsZXNzIHRoYW4gNSAgCmRpY2VfbGVzc190aGFuX2ZpdmUgPC0gc2FtcGxlX3NwYWNlX2RpY2Vfb25jZSAlPiUgCiAgZmlsdGVyKFgxIDwgNSkKCiMgcHJvYmFiaWxpdHkgb2YgdGhlIG91dGNvbWUKbnJvdyhkaWNlX2xlc3NfdGhhbl9maXZlKSAvIG5yb3coc2FtcGxlX3NwYWNlX2RpY2Vfb25jZSkKYGBgCgpUaGUgcHJvYmFiaWxpdHkgb2YgZ2V0dGluZyBhIG51bWJlciBsZXNzIHRoYW4gNSB3aGVuIGEgZGljZSBpcyByb2xsZWQgb25jZSBpcyAyLzMgPSAwLjY2Ni4KCipRdWVzdGlvbiAyLiBIb3cgbWFueSBvdXRjb21lcyBhcmUgdGhlcmUgaW4gdGhlIHNhbXBsZSBzcGFjZSBvZiBhbiBleHBlcmltZW50IGluIHdoaWNoIHdlIHRvc3MgdGhyZWUgZGljZT8qCmBgYHtyfQojIHNhbXBsZSBzcGF4Y2Ugd2hlbiB5b3Ugcm9sbCBhIGRpY2UgdGhyZWUgdGltZXMKc2FtcGxlX3NwYWNlX2RpY2VfdGhyZWUgPC0gcm9sbGRpZSgzKQoKc2FtcGxlX3NwYWNlX2RpY2VfdGhyZWUgJT4lIAogIHN1bW1hcmlzZShzYW1wbGVfc3BpY2UgPSBuKCkpCmBgYAoKVGhlcmUgYXJlIDIxNiBwb3NzaWJsZSBvdXRjb21lcyBpZiBhIGRpY2UgaXMgcm9sbGVkIHRocmVlIHRpbWVzLgoKKlF1ZXN0aW9uIDMuIEluIGFuIGV4cGVyaW1lbnQgd2hlcmUgd2Ugcm9sbCBmb3VyIGRpY2U6KgoxLiBob3cgbWFueSBvdXRjb21lcyBhcmUgaW4gdGhlIGV2ZW50IHRvdGFsX2VxdWFsc181XzZfNyAoaS5lLiB0aGUgdG90YWwgb2YgdGhlIGZvdXIgZGljZSBlcXVhbHMgNSwgNiBvciA3KT8KYGBge3J9CiMgc2FtcGxlIHNwYWNlIHdoZW4geW91IHJvbGwgYSBkaWNlIGZvdXIgdGltZXMKc2FtcGxlX3NwYWNlX2RpY2VfZm91ciA8LSByb2xsZGllKDQpCgp0b3RhbF9lcXVhbHNfNV82XzcgPC0gc2FtcGxlX3NwYWNlX2RpY2VfZm91ciU+JSAKbXV0YXRlKGNvbHVtc19zdW0gPSBYMSArIFgyICsgWDMgKyBYNCkgJT4lIApmaWx0ZXIoY29sdW1zX3N1bSA9PSA1IHwgY29sdW1zX3N1bSA9PSA2IHwgY29sdW1zX3N1bSA9PSA3KQoKbnJvdyh0b3RhbF9lcXVhbHNfNV82XzcpCmBgYAoKVGhlcmUgYXJlIDM0IG91dGNvbWVzIHdoZXJlIHRoZSBzdW1tYXRpb24gb2YgZm91ciBkaWNlcyB3aWxsIGdpdmUgZWl0aGVyIDUsIDYgb3IgNy4KCjIuIHdoYXQgaXMgdGhlIHByb2JhYmlsaXR5IG9mIHRoaXMgZXZlbnQ/CmBgYHtyfQpucm93KHRvdGFsX2VxdWFsc181XzZfNykgL25yb3coc2FtcGxlX3NwYWNlX2RpY2VfZm91cikKYGBgCgpUaGUgcHJvYmFiaWxpdHkgd2hlcmUgdGhlIHN1bW1hdGlvbiBvZiBmb3VyIGRpY2VzIHdpbGwgZ2l2ZSBlaXRoZXIgNSwgNiBvciA3IGlzIDAuMDMgKDMgZC5wLikKCjMuIHdoYXQgYXNzdW1wdGlvbnMgZG8gd2UgYXBwbHkgaW4gYW5zd2VyaW5nIHBhcnQgaWlpPwpJbiAqUXVlc3Rpb24gMyosIGl0IHdhcyBhc3N1bWVkIHRoYXQgYSBkaWZmZXJlbnQgZXZlbnQgaXMgb2NjdXJlZCB3aGVuIGEgZGljZSBpcyByb2xsZWQsICBlLmcuIHRoZSBzYW1lIG51bWJlciBpcyBhcHBlcmVhZCB3aGVuIGEgc2luZ2xlIGRpY2UgaXMgcm9sbGVkLgoKKlF1ZXN0aW9uIDQuIEZpdmUgY2hhaXJzIGFyZSBwbGFjZWQgaW4gYSByb3cgaW4gYSByb29tLCBhbG9uZyB3aXRoIGZpdmUgcGVvcGxlIG9mIGRpZmZlcmluZyBoZWlnaHQuIFRoZSBwZW9wbGUgc2l0IGRvd24gcmFuZG9tbHkgb24gdGhlIGNoYWlycy4gV2hhdCBpcyB0aGUgcHJvYmFiaWxpdHkgdGhhdCB0aGV5IHNpdCBpbiBvcmRlciBvZiBkZWNyZWFzaW5nIGhlaWdodCwgbGVmdCB0byByaWdodD86KgoKYGBge3J9CiMgY3JlYXRlIHZlY3RvciBvZiBjaG9pY2VzIGNvbnRhaW5zIGZpdmUgcGVwbGUsIG4gPSAxMC4gCmZpdmVfcGVvcGxlIDwtIGMoIkV4dHJlbWUgVGFsbCIsICJWZXJ5IFRhbGwiLCAiVGFsbCIsICJNZWRpdW0gSGVpZ2h0IiwgIlNob3J0IikKCiMgQ2hvb3NlIGEgY29tYmluYXRpb24gb2YgNSwgciA9IDUKcG9zc2libGVfc2VhdHMgIDwtIGFzX3RpYmJsZShwZXJtdXRhdGlvbnMobiA9IDUsIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgciA9IDUsIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgdiA9IGZpdmVfcGVvcGxlLCByZXBlYXRzLmFsbG93ZWQgPSBGQUxTRSkpCgojIHByb2JhYmlsaXR5IHRoYXQgdGhlIDUgcGVvcGxlIHNpdCBpbiBvcmRlciBvZiBkZWNyZWFzaW5nIGhlaWdodCAob25seSBwb3NzaWJsZSBvbmNlKToKMS9ucm93KHBvc3NpYmxlX3NlYXRzKQpgYGAKClRoZSBwcm9iYWJpbGl0eSB0aGF0IHRoZSBmaXZlIHBlb3BsZSBzaXQgaW4gb3JkZXIgb2YgZGVjcmVhc2luZyBoZWlnaHQgaXMgMC4wMDggKDMgZC5wKS4KCipRdWVzdGlvbiA1LiBJIHJvbGwgc2l4IGRpY2U6KgoxLiB3aGF0IGlzIHRoZSBwcm9iYWJpbGl0eSBJIHNlZSB0aGUgbnVtYmVycyA2LCA1LCA0LCAzLCAyIGFuZCAxIGluIG9yZGVyIG9uIHRoZSBkaWNlLCBsZWZ0IHRvIHJpZ2h0PwpgYGB7cn0KIyBzYW1wbGUgc3BhY2Ugd2hlbiB5b3Ugcm9sbCBhIGRpY2Ugc2l4IHRpbWVzCnNhbXBsZV9zcGFjZV9kaWNlX3NpeCA8LSByb2xsZGllKDYpCm5yb3coc2FtcGxlX3NwYWNlX2RpY2Vfc2l4KQoKMS9ucm93KHNhbXBsZV9zcGFjZV9kaWNlX3NpeCkKYGBgCjIuIHdoYXQgaXMgdGhlIHByb2JhYmlsaXR5IEkgc2VlIG9uZSBlYWNoIG9mIHRoZSBudW1iZXJzIDYsIDUsIDQsIDMsIDIgYW5kIDEgb24gdGhlIGRpY2UgcmVnYXJkbGVzcyBvZiBvcmRlcj8KCgoqUXVlc3Rpb24gNi5JZiBJIGRyYXcgYSBzaW5nbGUgY2FyZCBmcm9tIGEgNTItY2FyZCBkZWNrLCBhbmQgaXQgaXMgYmxhY2ssIHdoYXQgaXMgdGhlIHByb2JhYmlsaXR5IHRoYXQgaXRzIHN1aXQgaXMgc3BhZGVzPyoKYGBge3J9CmNhcmRzX2FsbCA8LSBjYXJkcygpICAKbnJvdyhjYXJkc19hbGwpCgoKY2FyZHNfc3BhZGUgPC0gY2FyZHNfYWxsICU+JSAKICBmaWx0ZXIoc3VpdCA9PSAiU3BhZGUiKQpwcm9iYUEgPSBucm93KGNhcmRzX3NwYWRlKS9ucm93KGNhcmRzX2FsbCkgIyBzcGFkZSBjYXJkcyBvdXQgb2YgNTIgCgpwcm9iYUIgPSAxLzIgIyBibGFjayBjYXJkcyBvdXQgb2YgNTIKCmNhcmRzX2JsYWNrX3NwYWRlIDwtIHByb2JhQS8gcHJvYmFCIApjYXJkc19ibGFja19zcGFkZQpgYGAKClRoZSBwcm9iYWJpbGl0eSB0aGF0IHRoZSBjYXJkIGlzIHNwYWRlLCBmcm9tIGEgYmxhY2sgcGFjaywgaXMgMC41IAoKKlF1ZXN0aW9uIDcuRWlnaHQgcGF0aWVudHM6IEFsaWNlLCBCb2IsIENhcm1lbiwgRGluZXNoLCBFbGxhLCBGZXJndXMsIEdpYW5uYSBhbmQgSGVucnkgYXJlIHdhaXRpbmcgdG8gc2VlIGEgZG9jdG9yLCBidXQgb25seSBmaXZlIGFwcG9pbnRtZW50IHNsb3RzIGFyZSBsZWZ0IHRvZGF5KgoxLiBJbiBob3cgbWFueSBkaWZmZXJlbnQgb3JkZXJzIGNhbiB0aGUgZG9jdG9yIHNlZSBwYXRpZW50cyB0b2RheT8KYGBge3J9CiMgY3JlYXRlIHZlY3RvciBvZiBlaWdodCBwYXRpZW50cyBmaXZlIHBlcGxlLCBuID0gOApwYXRpZW50cyA8LSBjKCJBbGljZSIsICJCb2IiLCAiQ2FybWVuIiwgIkRpbmVzaCIsICJFbGxhIiwgIkZlcmd1cyIsICJHaWFubmEiLCAiSGVucnkiKQoKIyBDaG9vc2UgYSBjb21iaW5hdGlvbiBvZiA1LCByID0gNQpwb3NzaWJsZV9hcHBvaW50bWVudCAgPC0gYXNfdGliYmxlKHBlcm11dGF0aW9ucyhuID0gOCwgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICByID0gNSwgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB2ID0gcGF0aWVudHMsIHJlcGVhdHMuYWxsb3dlZCA9IEZBTFNFKSkKCiMgcmVuYW1lIHRoZSB2YXJpYWJsZXMgaW4gdGhlICdwb3NzaWJsZV9hcHBvaW50bWVudCcgdGlibGUgKG5vdCBuZWNlc3NhcnkgZm9yIHRoZSBzdHVkeSkKcG9zc2libGVfYXBwb2ludG1lbnQgPC0gcG9zc2libGVfYXBwb2ludG1lbnQgJT4lCiAgcmVuYW1lKAogICAgU2xvdF8xID0gVjEsCiAgICBTbG90XzIgPSBWMiwKICAgIFNsb3RfMyA9IFYzLAogICAgU2xvdF80ID1WNCwKICAgIFNsb3RfNSA9IFY1CiAgKQoKbnJvdyhwb3NzaWJsZV9hcHBvaW50bWVudCkKCmBgYAoKVGhlcmUgYXJlIDY3MjAgZGlmZmVyZW50IHNsb3RzIHRoYXQgdGhlIDggcGF0aWVudHMgY2FuIGZpbGwgdGhlIDggc2xvdHMuIAoKCjIuIFdoYXQgaXMgdGhlIHByb2JhYmlsaXR5IG9mIEdpYW5uYSBhbmQgRGFuZXNoIGJvdGggYmVpbmcgc2VlbiB0b2RheT8KYGBge3J9CkdpYW5uYV9hbmRfRGluZXNoIDwtIHBvc3NpYmxlX2FwcG9pbnRtZW50ICU+JSAKICBpc2luKGMoIkdpYW5uYSIsIkRpbmVzaCIpKQoKc3VtKEdpYW5uYV9hbmRfRGluZXNoKS9ucm93KHBvc3NpYmxlX2FwcG9pbnRtZW50KQpgYGAKClRoZXJlIGlzIGEgcHJvYmFiaWxpdHkgb2YgMC4zNiAoMiBkLnApIHRoYXQgR2lhbm5hIGFuZCBEYW5lc2ggd2lsbCBiZSBzZWVuIHRvZGF5LgoKMy4gV2hhdCBpcyB0aGUgcHJvYmFiaWxpdHkgb2YgR2lhbm5hIGJlaW5nIHNlZW4gYmVmb3JlIERpbmVzaCB0b2RheT8KYGBge3J9CkdpYW5uYV9hbmRfRGluZXNoXzIgPC0gcG9zc2libGVfYXBwb2ludG1lbnQgJT4lIAogIGlzaW4oYygiR2lhbm5hIiwiRGluZXNoIiksIG9yZGVyZWQgPSBUUlVFKQoKYW5zMSA8LSBzdW0oR2lhbm5hX2FuZF9EaW5lc2hfMikvc3VtKEdpYW5uYV9hbmRfRGluZXNoKSAjIHByb3ZpZGVkIHRoZXkgd2lsbCBib3RoIHNlZW4gYnkgdGhlIGRvY3RvcgphbnMyIDwtIHN1bShHaWFubmFfYW5kX0RpbmVzaF8yKS9ucm93KHBvc3NpYmxlX2FwcG9pbnRtZW50KSAjIHByb3ZpZGVkIHRoZXkgd2lsbCBub3Qgc2VlbiBieSB0aGUgZG9jdG9yCmBgYAoKVGhlIHByb2JhYmlsaXR5IG9mIEdpYW5hIGJlaW5nIHNlZW4gYmVmb3JlIERpbmVzaCBpcyAwLjUsIHByb3ZpZGVkIHRoYXQgdGhleSB3aWxsIGJvdGggc2VlbiBieSB0aGUgZG9jdG9yLiBBbHRlcm5hdGl2ZSwgR2lhbm5hIGhhcyBhIHByb2JhYmlsaXR5IG9mIDAuMTggc2VlbiBieSB0aGUgZG9jdG9yIGJlZm9yZSBEaW5lc2ggaW4gY2FzZSBhbGwgOCBwYXRpZW50cyBhcmUgaW4gdGhlIHdhaXRpbmcgbGlzdC4gCgoKYGBge3J9CiMgdGhpcyBzaG91bGQgYmUgaGFsZiB0aGUgcHJvYmFiaWxpdHkgb2YgcXVlc3Rpb24gaWksIGJlY2F1c2UsIGluIGZpbHRlcmVkIG91dGNvbWVzIGZvciAKIyBxdWVzdGlvbiBpaS4sIEdpYW5uYSB3b3VsZCBiZSBiZWZvcmUgRGluZXNoIGhhbGYgdGhlIHRpbWUuCgojIGl2LgojIGZpcnN0IHN0ZXAgaXMgYSAyUDIgcHJvYmxlbTogcGVybXV0ZSAyIHBhdGllbnRzIGZyb20gMi4KaGlnaF9wcmlvcml0eV9wYXRpZW50cyA8LSBjKCJDYXJtZW4iLCAiSGVucnkiKQpTX2hpZ2hfcHJpb3JpdHkgPC0gYXNfdGliYmxlKHBlcm11dGF0aW9ucyhuID0gMiwgciA9IDIsIHYgPSBoaWdoX3ByaW9yaXR5X3BhdGllbnRzLCByZXBlYXRzLmFsbG93ZWQgPSBGQUxTRSkpCm5hbWVzKFNfaGlnaF9wcmlvcml0eSkgPC0gYygiYXBwdDEiLCAiYXBwdDIiKQoKIyBzZWNvbmQgc3RlcCBpcyBhIDZQMyBwcm9ibGVtOiBwZXJtdXRlIDMgcGF0aWVudHMgZnJvbSA2Lgpub3JtYWxfcHJpb3JpdHlfcGF0aWVudHMgPC0gYygiQWxpY2UiLCAiQm9iIiwgIkRpbmVzaCIsICJFbGxhIiwgIkZlcmd1cyIsICJHaWFubmEiKQpTX25vcm1hbF9wcmlvcml0eSA8LSBhc190aWJibGUocGVybXV0YXRpb25zKG4gPSA2LCByID0gMywgdiA9IG5vcm1hbF9wcmlvcml0eV9wYXRpZW50cywgcmVwZWF0cy5hbGxvd2VkID0gRkFMU0UpKQpuYW1lcyhTX25vcm1hbF9wcmlvcml0eSkgPC1jKCJhcHB0MyIsICJhcHB0NCIsICJhcHB0NSIpCgojIG1lcmdlIHRoZXNlIGRhdGFmcmFtZXMKUyA8LSBtZXJnZShTX2hpZ2hfcHJpb3JpdHksIFNfbm9ybWFsX3ByaW9yaXR5KQojIGZpbmFsIGFuc3dlcgpucm93KFMpCmBgYAoKCipRdWVzdGlvbiA4LklmIG9yZGVyIGlzIG5vdCBzaWduaWZpY2FudCwgaG93IG1hbnkgd2F5cyBhcmUgdGhlcmUgdG8gc2VsZWN0IGEgNSBzdHVkZW50IHF1aXogdGVhbSBmcm9tIGEgZ3JvdXAgb2YgOCBzdHVkZW50cz8qCmBgYHtyfQojIHVzZSB0aGUgY29tYmluYXRpb24gZnVuY3Rpb24sIHdoZXJlIHdlIGhhdmUgOCBzdHVkZW50cyBhbmQgd2UgbmVlZCBhIGNvbWJpbmF0aW9uIG9mIDUgc3R1ZGVudHMuIAoKIyBudW1iZXIgb2YgdG90YWwgc3R1ZGVudHMgKGFzc2lnbiBieSBhIG51bWJlcikKbnVtYmVyX29mX3N0dWRlbnRzIDwtIDE6OAoKIyB1c2UgdGhlIGNvbWJpbmF0aW9ucyBmdW5jdGlvbgpmaXZlX3N0dWRlbnRzX2NvbWJpIDwtIGNvbWJpbmF0aW9ucyhuID0gOCwgciA9IDUsIHYgPSBudW1iZXJfb2Zfc3R1ZGVudHMpCgojIG51bWJlciBvZiBjb21iaW5hdGlvbnMKbnJvdyhmaXZlX3N0dWRlbnRzX2NvbWJpKQpgYGAKCmBgYHtyfQojIHF1ZXN0aW9uIDggKGFsdGVybmF0aXZlIHdheSkgCmZpdmVfc3R1ZGVudHNfY29tYmlfMiA8LSBjaG9vc2UoOCwgNSkKZml2ZV9zdHVkZW50c19jb21iaV8yCmBgYAoKKlF1ZXN0aW9uIDkuSG93IHdvdWxkIHlvdXIgYW5zd2VyIGZvciBxdWVzdGlvbiA4IGNoYW5nZSBpZiBhIHRlYW0gY2FwdGFpbiBoYWQgdG8gYmUgc2VsZWN0ZWQgZm9yIGVhY2ggdGVhbT8qCmBgYHtyfQojIHVzZSB0aGUgY29tYmluYXRpb24gZnVuY3Rpb24sIHdoZXJlIHdlIGhhdmUgNyAob3V0IG9mIDgpIHN0dWRlbnRzIGFuZCB3ZSBuZWVkIGEgY29tYmluYXRpb24gb2YgYW5vdGhlciA0IHN0dWRlbnRzIHRvIGZpbGwgYSB0ZWFtIG9mIDUuIAoKIyBudW1iZXIgb2YgdG90YWwgc3R1ZGVudHMgKGFzc2lnbiBieSBhIG51bWJlcikKbnVtYmVyX29mX3N0dWRlbnRzXzIgPC0gMTo3CgojIHVzZSB0aGUgY29tYmluYXRpb25zIGZ1bmN0aW9uCmZvdXJfc3R1ZGVudHNfY29tYmkgPC0gY29tYmluYXRpb25zKG4gPSA3LCByID0gNCwgdiA9IG51bWJlcl9vZl9zdHVkZW50cykKCm5yb3coZm91cl9zdHVkZW50c19jb21iaSkKCiMgbnVtYmVyIG9mIGNvbWJpbmF0aW9ucwojbnJvdyhmaXZlX3N0dWRlbnRzX2NvbWJpKQpgYGAKClRoaXMgdGltZSwgdGhlcmUgYXJlIDM1IGNvbWJpbmF0aW9ucyB0aGF0IGNhbiBmb3JtIGEgdGVhbSBvZiA1IG91dCBvZiA4IHBlcGxlLCBwcm92aWRlZCBvbmUgb2YgdGhvc2UgOCBzdHVkZW50cyBpcyBhbHdheXMgaW4gdGhlIHRlYW0uCg==</div>
 
 
 

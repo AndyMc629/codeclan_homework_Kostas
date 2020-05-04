@@ -1,8 +1,8 @@
 # In this script, we present the results related with Nintendo.
 
-library(tidyverse)
-library(shiny)
-library(CodeClanData)
+#library(tidyverse)
+#library(shiny)
+#library(CodeClanData)
 
 all_name <- unique(nintendo_sales$name)
 all_developer <- unique(nintendo_sales$developer)
@@ -19,6 +19,9 @@ ui <- fluidPage(
   titlePanel(tags$b("Nintendo Games")),
   
   tabsetPanel(
+    # ----
+    # Tab 1 - 
+    # ----
      tabPanel("Nintendo Dataset",
         
   fluidRow(
@@ -44,6 +47,9 @@ ui <- fluidPage(
   tableOutput("table_output")
   
      ),
+  # ----
+  # Tab 2 - 
+  # ----
   tabPanel("Nintendo Developers",
            plotOutput("nintendo_developers"),
            mainPanel(tags$i("The above graph, Fig.1, shows the number of games, in percent, that were developed by each 
@@ -97,6 +103,16 @@ server <- function(input, output) {
     coord_flip()+
     labs(title = "Number of games, in percentage, by each developer")
   })
+  
+  
+  game_sales_Nintendo <- game_sales %>% 
+    select(name,publisher, developer, platform) %>% 
+    filter(publisher == "Nintendo") %>% 
+    group_by(developer) %>% 
+    summarise(count = n()) %>% 
+    mutate(percentage = round((count*100)/sum(count), 2))
+  
+  
   
 #plot 2  
   output$nintendo_sales <- renderPlot({

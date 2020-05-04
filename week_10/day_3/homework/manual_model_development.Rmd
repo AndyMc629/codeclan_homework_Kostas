@@ -1,0 +1,107 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+#Manual model development
+
+
+### Section 1: MVP
+
+
+**Tidy up the data ready for regression:**
+
+```{r}
+library(tidyverse)
+library(janitor)
+library(modelr)
+library(broom)
+library(ggfortify)
+library(infer)
+library(fastDummies)
+library(mosaicData)
+
+# visualisation packages
+library(ggiraphExtra)
+library(GGally)
+```
+
+
+
+The **kc_house_data** dataset from Kaggle page is considered for this study. This dataset contains house sale prices for King County, Seattle. It includes homes sold between May 2014 and May 2015. The aim of the study is to build a regression model for the sold house **price** variable with respect to some predictor variables in the dataset.
+```{r}
+house_data <- read_csv("data/kc_house_data.csv")
+glimpse(house_data)
+```
+
+
+The dataset contains 21 variables. Some variables are dropped from the dataset as we are confident enough to say they are not significant for the regression model. For example, the home **id** and **date** variables are not needed in the study. Moreover, the number of bathrooms, and longitude and latitude variables are expected also to be less significant. However, they will remain in dataset for furter analysis. 
+```{r}
+house_data <- house_data %>% 
+  select(-c("id", "date"))
+```
+
+
+The remaining predictor variables are now grouped into three categories. For each category, a **ggpairs( )** plot will be used to examined if they is any correlation between the **price** and predictor variables from each category. The categories are given below by: 
+1. Condition of the house
+```{r, warning=FALSE, message=FALSE}
+ggpairs(house_data[,c("price","condition", "grade", "yr_built", "yr_renovated")])
+```
+
+2. Area of the house
+```{r, warning=FALSE, message=FALSE}
+ggpairs(house_data[,c("price","bedrooms", "bathrooms", "floors", "sqft_living", "sqft_lot", "sqft_above", "sqft_basement")])
+```
+
+3. Neighbourhood 
+```{r, warning=FALSE, message=FALSE}
+ggpairs(house_data[,c("price","lat", "long", "zipcode", "sqft_living15", "sqft_lot15", "waterfront", "view")])
+```
+
+After looking the above plots, the following 11 predictor variables will remain in the study for further analysis: 
+1. sqft_living (r = 0.702)
+2. grade (r = 0.667)
+3. sqft_above (r = 0.606)
+4. bathrooms (r = 0.525)
+5. view (r = 0.397)
+6. sqft_basement (r = 0.324)
+7. bedrooms (r = 0.308)
+8. lat (r = 0.307)
+9. watefront (r = 0.266)
+10. floors (r = 0.257)
+11. yr_renovated (r = 0.126)
+
+```{r}
+house_data_tidy <- house_data %>% 
+  select(c("price", "sqft_living", "grade", "sqft_above", "bathrooms", "view", "sqft_basement", "bedrooms", "lat", "waterfront", "floors", "yr_renovated"))
+```
+
+
+Let’s now built our model. We start with **sqft_living**
+```{r}
+# build a model which tries to predict prestige from education
+model1 <- lm(price ~ sqft_living, data = house_data_tidy)
+```
+
+Let’s see the summary() and diagnostics of the model
+```{r}
+summary(model1)
+par(mfrow = c(2,2))
+plot(model1)
+```
+
+We now need a second predictor for our model. 
+```{r}
+# build a model which tries to predict prestige from education
+model2 <- lm(price ~ sqft_living + grade, data = house_data_tidy)
+summary(model2)
+```
+
+
+
+And add a third predictor for our model. 
+```{r}
+# build a model which tries to predict prestige from education
+model3 <- lm(price ~ sqft_living + grade + view, data = house_data_tidy)
+summary(model3)
+```

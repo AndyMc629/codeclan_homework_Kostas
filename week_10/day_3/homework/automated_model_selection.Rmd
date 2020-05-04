@@ -1,0 +1,76 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+# Automated Model selection
+
+A package called glmulti offers a better approach, but leaps has a simpler interface, so we’ll use leaps to learn the techniques.
+
+```{r}
+library(tidyverse)
+library(leaps)
+library(CodeClanData)
+```
+
+```{r}
+insurance %>%  view
+```
+
+```{r}
+regsubsets_forward <- regsubsets(charges ~ ., data = insurance, nvmax = 8, method = "forward")
+```
+
+
+```{r}
+plot(regsubsets_forward, scale = "adjr2")
+```
+
+
+```{r}
+plot(regsubsets_forward, scale = "bic")
+```
+
+
+
+### Backward selection
+
+```{r}
+regsubsets_backward <- regsubsets(charges ~ ., data = insurance, nvmax = 8, method = "backward")
+```
+
+```{r}
+plot(regsubsets_backward, scale = "adjr2")
+```
+
+### Exhaustive selection
+```{r}
+regsubsets_exhaustive <- regsubsets(charges ~ ., data = insurance, nvmax = 8, method = "exhaustive")
+```
+
+```{r}
+plot(regsubsets_exhaustive, scale = "adjr2")
+```
+
+
+```{r}
+model_without_region <- lm(charges ~ age + bmi + children + smoker, data = insurance)
+
+summary(model_without_region)
+```
+
+```{r}
+model_with_region <- lm(charges ~ age + bmi + children + smoker + region, data = insurance)
+
+summary(model_with_region)
+```
+
+```{r}
+anova(model_without_region, model_with_region)
+```
+
+
+```{r}
+plot(model_without_region)
+```
+

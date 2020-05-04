@@ -1,6 +1,6 @@
-library(tidyverse)
-library(shiny)
-library(CodeClanData)
+#library(tidyverse)
+#library(shiny)
+#library(CodeClanData)
 
 game_sales %>% 
   filter(publisher == "Nintendo") %>% 

@@ -1,0 +1,84 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+library(tidyverse)
+library(janitor)
+library(GGally)
+library(leaps)
+library(modelr)
+```
+
+```{r}
+avocado <- read_csv("data/avocado.csv")
+summary(avocado)
+```
+
+```{r}
+avocado <- clean_names(avocado)
+```
+
+In this study, it is interesting to model the average avocado price (**average_price**) with respect to some predictor variables, such as total volume of avocados sold in a specific period (e.g. week or a month), type of avocados, the city of observation (where they coming from). 
+
+To start with, the variable **type** is converted to a logical vector. 
+```{r}
+avocado_new <- avocado %>% 
+  mutate(type = ifelse(type == "conventional", TRUE, FALSE))
+```
+
+We expect the total number of bags to be strong correlated with the the size of bags, small, large and extra large bags. The ggpairs() funciton is used to confirm the correlation value between those three variables as well as the average price. 
+```{r, warning = FALSE, message=FALSE}
+ggpairs(avocado_new[,c("total_volume","total_bags", "small_bags", "large_bags", "x_large_bags")])
+```
+
+As can be seen, all the considered variables are strongly correlated. For example, the r value between total bags and small bags is 0.99 whereas the r value between total volume and small bags is 0.97. For this reason, the variables small, large and extra large bags will not be considered in the study.
+
+It is now interesting to compare the **average price** variable with the total volume of avocados sold. 
+```{r}
+avocado_new %>%
+  ggplot(aes(x = total_volume, y = average_price)) +
+  geom_point() 
+```
+
+The average price has a negative correlation value of 0.19 with respect to the total volume of avocados sold. 
+```{r}
+avocado_new %>%
+  summarise(cor(average_price, total_volume))
+```
+
+Now let’s run the regression and diagnostics: 
+```{r}
+model <- lm(average_price ~ total_volume, data = avocado_new)
+summary(model)
+```
+As can be seen, there is a very small value of r^2, 0.04, but the p-value of the total volume coefficient indicates that the predictor is significant.
+
+
+It will be now interesting to compare the two types of avocados, conventional and organic.  A box plot will show the comparison:
+```{r}
+avocado_new %>%
+  ggplot(aes(x = type, y = average_price)) +
+  geom_boxplot() 
+```
+Suprisingly, the conventional avocado has a higher average price than the organic one. This is probably due to the fact that people tend to buy more conventional avocados and therefore the price goes up. We will add the type into our model. 
+```{r}
+model2<- lm(average_price ~ total_volume + type, data = avocado_new)
+summary(model2)
+```
+As can be seen, the r^2 has been increased from 0.04 to 0.38. The p-values are 0,  which indicates that the predictor variables are significant
+
+In the next study, we will use ggpaits to compare some of the remaining variables. As shown, there is a strong correlation between date and year. Moreover, the average price seems to be somehow correlated with the date variable.
+```{r, warning = FALSE, message=FALSE}
+ggpairs(avocado_new[,c("average_price","type", "year", "date")])
+```
+
+Finally, we will add the region and date varibles into our model. The r^2 has been now increased from 0.38 to 0.55. However, the p-value of some regions are above 0.05.
+```{r}
+model3<- lm(average_price ~ total_volume + type + region + date, data = avocado_new)
+summary(model3)
+```
+
+In this study, we conclude that the **average price of avocados** can be explained or affected by the total volume of avocados sold, the type of avocados, their region of origin and the date where they are sold.  
+

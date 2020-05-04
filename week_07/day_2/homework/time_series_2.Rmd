@@ -99,12 +99,17 @@ nyc_bikes_filled <- nyc_bikes_by_date %>%
 
 
 ```{r}
+nyc_bikes_by_date
+```
+
+
+```{r}
 # create a fit dataset which has the results from our three different models for beer production in australia
-fit <- nyc_bikes_by_date %>%
+fit <- nyc_bikes_filled  %>%
   model(
-    snaive = SNAIVE(nyc_bikes_by_date),
-    mean_model = MEAN(nyc_bikes_by_date),
-    arima = ARIMA(nyc_bikes_by_date)
+    snaive = SNAIVE(nyc_bikes_filled ),
+    mean_model = MEAN(nyc_bikes_filled ),
+    arima = ARIMA(nyc_bikes_filled )
   )
 fit 
 ```
