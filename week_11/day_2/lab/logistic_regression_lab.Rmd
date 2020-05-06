@@ -1,0 +1,128 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+# Logistic regression lab
+
+
+### Section 1: Learning Objectives
+1. Practice performing logistic regression
+2. Extract and interpret fitted coefficients
+3. Calculate and plot ROC curves and the AUC
+4. Compare classifiers based on different logistic regressions
+
+### Section 1: MVP
+You’re given sample data for the customers of a **telecomms company**, and asked to use the data to build a classifier to predict which customers are likely to ‘churn’ (i.e. decline to renew their service contract and move to another supplier) over the next 12 months. **Your clients intend to use your classifier to send targeted offers to customers likely to churn.**
+
+The sample data given in file telecomms_churn.xlsx contains a number of columns, including a Churn column stating whether each customer churned during the previous 12 months.
+
+```{r}
+library(tidyverse)
+library(janitor)
+library(readxl)
+```
+
+
+
+```{r}
+telecoms <- read_xlsx("data/telecomms_churn.xlsx")
+telecoms <- clean_names(telecoms)
+```
+
+```{r}
+summary(telecoms)
+```
+
+We replace the NAs from the total_charges variable by the mean value of that variable
+```{r}
+telecoms <- telecoms %>% 
+  mutate(total_charges = replace(total_charges, is.na(total_charges),
+                                 mean(total_charges, na.rm = TRUE)))
+```
+
+
+Examine the relationships between the churn variable and other possible predictor variables, looking for significant relationships.
+```{r}
+library(GGally)
+```
+
+```{r, message=FALSE}
+ggpairs(telecoms[,c("churn", "contract", "total_charges", "gender", "internet_service")])
+```
+As shown from the above plot, the churn variable seems to be affected by the variable **total charges**, **internet service** and **contract**. 
+
+We plot the total charges with respect to the churn. It it clear to see that customers with higher total charges are likely to renew their contract.
+```{r}
+telecoms %>% 
+  ggplot()+
+  aes(x = churn, y = total_charges) +
+  geom_col()
+```
+
+It is also seen that montly charges and total charges are correlated. Therefore, in the study we will only deal with the total charges variable.
+```{r}
+telecoms %>% 
+  ggplot() +
+  aes(x = total_charges, y = monthly_charges) +
+  geom_point()  
+
+telecoms %>% 
+  summarise(cor(total_charges, monthly_charges))
+```
+
+Convert all character columns to factor columns (hint consider mutate_if() for this). Convert senior_citizen to a meaningful factor column as well.
+```{r}
+telecoms_new <- telecoms %>% 
+  mutate_if(is.character, as.factor)
+```
+
+We also rename the churn variable and call it "renew". This variable gives TRUE if customers renew their contract.
+```{r}
+telecoms_new_logical <- telecoms_new%>% 
+  mutate(renew = ifelse(churn == "No", TRUE, FALSE))
+```
+
+Let's plto the **renew** variable with respect to **total_charges.**
+```{r}
+score_plot <- ggplot(telecoms_new_logical) +
+  geom_jitter(aes(x = total_charges, y = as.integer(renew)), shape = 1, 
+              position = position_jitter(h = 0.03))
+
+score_plot
+```
+As shown, it is more likely that customers renew their contract if they pay high amount of total charges.
+
+
+3. Let’s perform logistic regression using the churn column as the binary dependent variable. Create three separate single predictor logistic regression models choosing from amongst the promising predictor columns you found in your analysis above. Try to have at least one continuous predictor, and at least one categorical predictor. Check that the coefficient of the single predictor in each model is statistically significant.
+**Model 1 with Continous Predictor Variable (total_charges)** 
+```{r}
+telecoms_logred_model1_continous <- glm(renew ~ total_charges, data = telecoms_new_logical, family = binomial(link = 'logit'))
+
+summary(telecoms_logred_model1_continous)
+```
+
+**Model 2 with Categorical Predictor Variable (internet service)** 
+```{r}
+telecoms_logred_model2_categorical <- glm(renew ~ internet_service, data = telecoms_new_logical, family = binomial(link = 'logit'))
+
+summary(telecoms_logred_model2_categorical)
+```
+
+
+**Model 3 with Categorical Predictor Variable (contract)** 
+```{r}
+telecoms_logred_model3_categorical <- glm(renew ~ contract, data = telecoms_new_logical, family = binomial(link = 'logit'))
+
+summary(telecoms_logred_model3_categorical)
+```
+
+For each of the above models, the coefficients of the single predictor variables are significant as they are all 0.
+
+
+
