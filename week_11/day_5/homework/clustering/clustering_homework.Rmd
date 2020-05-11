@@ -1,0 +1,143 @@
+---
+title: "Clustering weekend homework"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    number_sections: true
+    df_print: paged
+  pdf_document: default
+---
+<div class="blame">
+author: "Kostas Christodoulou"<br>
+date: "6th May 2020"
+</div>
+
+# Clustering weekend homework
+This work studies customers' data from a shopping centre and aims to identify any possible clusters (or groups) depending on there shopping behaviour. The dataset includes 200 customers. It shows their sex age and their annual inclome (in thousands). The final variable shows each customer's spending score, which varies from 1 to 100. 
+
+The following packages are needed for the this study: 
+```{r}
+library(tidyverse)
+library(janitor)
+library(factoextra)
+library(animation)
+```
+The dataset is given below: 
+```{r}
+customer_data <- read_csv(file = "mall_customers.csv") %>% 
+  clean_names()
+
+summary(customer_data)
+```
+
+The spending-score in terms of the custeromer's gender is shown in boxplot. As can bem seen, the spending-score median of both genders is similar for both genders.   
+```{r}
+customer_data %>% 
+  ggplot() +
+  aes(x = gender, y = spending_score_1_100) +
+  geom_boxplot()
+```
+
+The **annual income** and **spending score** is also illustated. As shown in the figure below, there are 5 possible groups and can be explained by:
+1. Spending score < 40 and annual income < 50K
+2. Spending score < 40 and annual income > 50K
+3. 40 < Spending score < 65 
+4. Spending score > 65 and annual income < 50K
+2. Spending score < 65 and annual income > 50K
+```{r}
+customer_data %>% 
+  ggplot() +
+  aes(y = annual_income_k, x= spending_score_1_100) +
+  geom_point()
+```
+
+Finally, the **age** and **spending score** is also illustated but the figure doesn't show any clear grouping.
+```{r}
+customer_data %>% 
+  ggplot() +
+  aes(x = age, y = spending_score_1_100) +
+  geom_point()
+```
+
+A marketing campaign will be carried out to target customers based on their spending score and annual income. The variables **spending score** and **annual income** will be only considered, therefore
+```{r}
+customer_data <- customer_data %>% 
+      select(annual_income_k, spending_score_1_100) 
+```
+
+A k-means clustering wiil be conducted, but first the data will be standardised by using the scale function.
+```{r}
+customer_data_scale <- customer_data %>% 
+      mutate_if(is.numeric, scale)
+
+summary(customer_data_scale)
+```
+
+The number of k clusters should be defined firts before we perfor a k-means clustering analysis. Three approaches will be used, starting with the elbow approach. A number of k, between 4 to 6 clusters 
+```{r}
+fviz_nbclust(customer_data_scale, kmeans, method = "wss")
+```
+
+The silhouette approach is now used which gives 6 clusters.
+```{r}
+fviz_nbclust(customer_data_scale, kmeans, method = "silhouette")
+```
+
+Finally, the **gap statistic** aproach is used
+```{r}
+fviz_nbclust(customer_data_scale, kmeans, method = "gap_stat")
+```
+
+The three approaches give quite different results, therefore we can conclude that the considered dataset is not well suited for clustering. However, from our initial explanatory analysis and from the results obtained from the **elbow** and **silhouette** approach, we will go ahead with k = 5.
+```{r}
+clustered_customer_data <- kmeans(customer_data_scale, centers = 5, nstart = 25)
+clustered_customer_data
+```
+
+Let's now plot the results
+```{r}
+# Set min & max number of clusters want to look at 
+max_k <- 20 
+
+k_clusters <- tibble(k = 2:max_k) %>%
+  mutate(
+    kclust = map(k, ~ kmeans(customer_data_scale, .x, nstart = 25)), 
+    tidied = map(kclust, tidy),
+    glanced = map(kclust, glance),
+    augmented = map(kclust, augment, customer_data_scale)
+  )
+
+k_clusters
+```
+
+If we want to view any of the outputs from kmeans(), tidy(), glance() and augmented() for each value of k we can unnest() the outputs of interest, which will take the list-column and flattens it into a regular column. We are interested in the total within sum of squares (tot.withinss) within the glanced column.
+```{r}
+clusterings <- k_clusters %>%
+  unnest(glanced)
+
+clusterings
+```
+
+The clusters obtained from the data are shown below. In overall, the clustering seems a good fit for this data as we can see five clear groups from the given dataset.
+```{r}
+ clusterings %>% 
+  unnest(cols = c(augmented)) %>%
+  filter(k == 5) %>%
+ ggplot(aes(x = annual_income_k, y = spending_score_1_100)) +
+  geom_point(aes(color = .cluster)) + 
+  facet_wrap(~ k)
+```
+
+
+Fiannly, let's also obtain some information about each cluster, such as the mean and size. The results are shown below.
+```{r}
+tidy(clustered_customer_data, 
+     col.names = colnames(customer_data_scale))
+```
+and let's assign each independend observation in the dataset to each cluster.
+```{r}
+augment(clustered_customer_data, customer_data)
+```
+
+
